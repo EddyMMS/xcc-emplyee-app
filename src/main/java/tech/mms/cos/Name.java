@@ -15,6 +15,10 @@ public class Name {
         this.validate();
     }
 
+    private Name(){
+
+    }
+
     public void validate() {
         if(getFirstName() == null || getFirstName().isBlank()) {
             throw new RuntimeException("First Name is not valid!");

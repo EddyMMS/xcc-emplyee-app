@@ -1,5 +1,6 @@
 package tech.mms.cos;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class FileEmployeeRepository implements EmployeeRepository {
 
-
+    File file = new File("employee.json");
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
 
@@ -19,14 +20,19 @@ public class FileEmployeeRepository implements EmployeeRepository {
 
         // Gib mir alle Employees in einer Liste. Füg den neuen Employee der Liste hinzu. Speicher Liste ab.
 
-        try{
-            objectMapper.writeValue(new File("employee.json"), List.of(employee));
-            System.out.println("The JSON-File was successfully made");
+        List<Employee> employeeList = readEmployees();
+
+         employeeList.add(employee);
+
+        try {
+            objectMapper.writeValue(file, employeeList);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+
     }
+
 
     // Anfangs, frag den User, ob er neuen Employee anlegen will, oder alle Employees ausgeben
 
@@ -36,14 +42,18 @@ public class FileEmployeeRepository implements EmployeeRepository {
     public List<Employee> readEmployees() {
 
         // Gib List zurück. Im Fehlerfall, leere Liste zurückgeben. Überprüfe, ob employee.json existiert, wenn nicht gib leere Liste zurück.
+        List<Employee> employees = new ArrayList<>();
 
-        try {
-            Employee[] employees = objectMapper.readValue(new File("employee.json"), Employee[].class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(file.exists()){
+            try{
+                employees = objectMapper.readValue(file, new TypeReference<List<Employee>>() {});
+                // System.out.println("The JSON-File was successfully made");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
-        return List.of();
+        return employees;
     }
 }
 

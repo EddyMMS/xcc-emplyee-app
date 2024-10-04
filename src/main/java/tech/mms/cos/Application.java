@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 class Test {
     private String name;
@@ -44,18 +45,26 @@ public class Application {
 
         EmployeeRepository employeeRepository = new FileEmployeeRepository();
 
-        Employee employee = createNewEmployee();
-        employeeRepository.saveEmployee(employee);
-        printEmployee(employee);
+        output.println("Hi! Please enter one of the following commands: NEW ACC / LIST / READ <NAME>");
+
+        if (reader.readLine().equals("LIST")) {
+
+            List<Employee> employeeList = employeeRepository.readEmployees();
+            employeeList.forEach(employee -> {
+                output.println(employee);
+            } );
+        } else if (reader.readLine().equals("NEW ACC")){
+            Employee employee = createNewEmployee();
+            employeeRepository.saveEmployee(employee);
+            printEmployee(employee);
+    }
+
     }
 
     public static Employee createNewEmployee() {
 
 
         // TODO: InputReader als eigene Klasse implementieren und Scanner abkapseln
-
-        output.println("Hi! Pleaser answer the questions below!");
-
 
         output.println("What is your full name?");
         String nameInput = reader.readLine();

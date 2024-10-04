@@ -38,6 +38,15 @@ public class Employee {
         validate();
     }
 
+    private Employee(){
+
+    }
+
+    @Override
+    public String toString() {
+        return getFullName() + "\t |" + getAge() + "yo\t |" + getGender();
+    }
+
     private void validate() {
         this.name.validate();
         if(getHoursPerWeek() < 0) {
