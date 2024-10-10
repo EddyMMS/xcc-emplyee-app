@@ -1,10 +1,12 @@
 package tech.mms.cos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.mongojack.Id;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.Date;
+import java.util.UUID;
 
 /*
 TODO Constructor hinzufuegen
@@ -20,6 +22,7 @@ TODO Inhalt der Variablen beim erstellen des Employees pruefen
     Falls irgendwas nicht zutrifft RuntimeException schmeissen
  */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee {
 
     private LocalDate birthdate;
@@ -28,7 +31,7 @@ public class Employee {
     private Genders gender;
     private Name name;
 
-    public Employee(LocalDate birthdate, double hourlyRate, int hoursPerWeek, Genders gender, Name name){
+    public Employee(LocalDate birthdate, double hourlyRate, int hoursPerWeek, Genders gender, Name name) {
         this.birthdate = birthdate;
         this.hourlyRate = hourlyRate;
         this.hoursPerWeek = hoursPerWeek;

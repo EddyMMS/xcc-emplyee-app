@@ -7,26 +7,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-class Test {
-    private String name;
-    private int age;
-
-    private Test() {}
-
-    public Test(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-}
-
 public class Application {
 
     private static OutputWriter output = new ConsoleOutputWriter();
@@ -36,24 +16,22 @@ public class Application {
 
     public static void main(String[] args) throws JsonProcessingException {
 
-        Test test = new Test("Simon", 26);
-        String json = new ObjectMapper().writeValueAsString(test);
-        System.out.println(json);
-        Test test2 = new ObjectMapper().readValue(json, Test.class);
-
         // TODO: Wenn ein attribute null ist, dann nicht in json mitschreiben
 
-        EmployeeRepository employeeRepository = new FileEmployeeRepository();
+        EmployeeRepository employeeRepository = MongoEmployeeRepository.get();
 
         output.println("Hi! Please enter one of the following commands: NEW ACC / LIST / READ <NAME>");
 
-        if (reader.readLine().equals("LIST")) {
+
+        String input = reader.readLine();
+
+        if (input.equals("LIST")) {
 
             List<Employee> employeeList = employeeRepository.readEmployees();
             employeeList.forEach(employee -> {
                 output.println(employee);
             } );
-        } else if (reader.readLine().equals("NEW ACC")){
+        } else if (input.equals("NEW ACC")){
             Employee employee = createNewEmployee();
             employeeRepository.saveEmployee(employee);
             printEmployee(employee);

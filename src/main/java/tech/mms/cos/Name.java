@@ -2,6 +2,8 @@ package tech.mms.cos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Objects;
+
 public class Name {
     private String firstName;
     private String middleName;
@@ -51,4 +53,5 @@ public class Name {
 
         return getLastName() + ", " + getFirstName() + " " + getMiddleName();
     }
+
 }
