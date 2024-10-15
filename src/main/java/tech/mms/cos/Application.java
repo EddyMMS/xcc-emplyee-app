@@ -1,11 +1,19 @@
 package tech.mms.cos;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import tech.mms.cos.io.ConsoleInputReader;
+import tech.mms.cos.io.ConsoleOutputWriter;
+import tech.mms.cos.io.OutputWriter;
+import tech.mms.cos.model.Employee;
+import tech.mms.cos.model.Genders;
+import tech.mms.cos.model.Name;
+import tech.mms.cos.repository.EmployeeRepository;
+import tech.mms.cos.repository.MongoEmployeeRepository;
 
 public class Application {
 

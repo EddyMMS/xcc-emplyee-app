@@ -1,4 +1,4 @@
-package tech.mms.cos;
+package tech.mms.cos.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import tech.mms.cos.model.Employee;
 
 public class FileEmployeeRepository implements EmployeeRepository {
 
