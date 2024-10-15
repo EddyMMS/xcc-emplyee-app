@@ -1,4 +1,4 @@
-package tech.mms.cos;
+package tech.mms.cos.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
