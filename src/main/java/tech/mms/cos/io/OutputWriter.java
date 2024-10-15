@@ -1,4 +1,4 @@
-package tech.mms.cos;
+package tech.mms.cos.io;
 
 public interface OutputWriter {
 

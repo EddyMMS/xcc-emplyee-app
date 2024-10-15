@@ -1,12 +1,10 @@
-package tech.mms.cos;
+package tech.mms.cos.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.mongojack.Id;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.UUID;
 
 /*
 TODO Constructor hinzufuegen
