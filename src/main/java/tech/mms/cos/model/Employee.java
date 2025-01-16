@@ -1,4 +1,5 @@
 package tech.mms.cos.model;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -26,6 +27,7 @@ public class Employee {
     private LocalDate birthdate;
     private double hourlyRate;
     private int hoursPerWeek;
+    private double monthlySalary;
     private Genders gender;
     private Name name;
 
@@ -39,7 +41,7 @@ public class Employee {
         validate();
     }
 
-    private Employee(){
+    private Employee() {
 
     }
 
@@ -50,10 +52,10 @@ public class Employee {
 
     private void validate() {
         this.name.validate();
-        if(getHoursPerWeek() < 0) {
+        if (getHoursPerWeek() < 0) {
             throw new RuntimeException("Hours per Week is not valid!");
         }
-        if(getHourlyRate() < 0) {
+        if (getHourlyRate() < 0) {
             throw new RuntimeException("Hours per Week is not valid!");
         }
         if (birthdate.isAfter(LocalDate.now())) {
@@ -75,16 +77,20 @@ public class Employee {
     }
 
     @JsonIgnore
-    public String getFullName(){
+    public String getFullName() {
         return name.getFullName();
     }
 
-    public double getHourlyRate(){
+    public double getHourlyRate() {
         return hourlyRate;
     }
 
-    public int getHoursPerWeek(){
+    public int getHoursPerWeek() {
         return hoursPerWeek;
+    }
+
+    public double getMonthlySalary() {
+        return getHoursPerWeek() * 4 * getHourlyRate();
     }
 
     public LocalDate getBirthdate() {

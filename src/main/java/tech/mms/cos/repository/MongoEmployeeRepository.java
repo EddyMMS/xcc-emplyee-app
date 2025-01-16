@@ -5,11 +5,18 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import org.bson.UuidRepresentation;
 import org.mongojack.JacksonMongoCollection;
+import tech.mms.cos.model.Employee;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import tech.mms.cos.model.Employee;
+// Anlegen eines neuen Eompoyees ßber das Programm in der MongoDB (Nutzung des ServiceLocators) (NoSQLBOoster)
+// Was ist eine ID, Was ist eine UUID
+// Hat der Employee in der MongoDB eine ID. Falls nein, warum nicht. Falls ja, was ist die ID und wo kommt sie her
+// Employee erweitern um eine ID (UUID), Google "mongojack id entity"
+// Anlegen eines neuen Employees, MongoDB hat eine ID fßr den neuen Employee, welcher eine UUID ist
+// MongoDB: Collection (im Verlgeich zu Relationaler Datenbank), Was ist ein Index, Was ist ein Shard
+
 
 public class MongoEmployeeRepository implements EmployeeRepository {
 

@@ -1,49 +1,68 @@
 package tech.mms.cos;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
+import tech.mms.cos.io.ApplicationConfigReader;
 import tech.mms.cos.io.ConsoleInputReader;
-import tech.mms.cos.io.ConsoleOutputWriter;
 import tech.mms.cos.io.OutputWriter;
 import tech.mms.cos.model.Employee;
 import tech.mms.cos.model.Genders;
 import tech.mms.cos.model.Name;
 import tech.mms.cos.repository.EmployeeRepository;
-import tech.mms.cos.repository.MongoEmployeeRepository;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Application {
 
-    private static OutputWriter output = new ConsoleOutputWriter();
-    private static ConsoleInputReader reader = new ConsoleInputReader();
+    private static OutputWriter output;
+    private static ConsoleInputReader reader;
 
+    public static void main(String[] args) {
 
+        if (args.length == 1) {
+            String configFileName = args[0];
+            ApplicationConfigReader.setConfigFilePath(configFileName);
+        }
 
-    public static void main(String[] args) throws JsonProcessingException {
+        ApplicationConfigReader.getConfig();
+
+        output = ServiceLocator.getInstance().get("OutputWriter");
+        reader = new ConsoleInputReader();
+
 
         // TODO: Wenn ein attribute null ist, dann nicht in json mitschreiben
 
-        EmployeeRepository employeeRepository = MongoEmployeeRepository.get();
+        EmployeeRepository employeeRepository = ServiceLocator.getInstance().get("EmployeeRepository");
+        TopEmployees topEmployees = new TopEmployees(employeeRepository);
 
-        output.println("Hi! Please enter one of the following commands: NEW ACC / LIST / READ <NAME>");
+        output.println("Hi! Please enter one of the following commands: NEW ACC / LIST / TOP <NUMBER> (Default 5) / READ <NAME>");
 
 
         String input = reader.readLine();
+        String employeeName = ""; // TODO
 
         if (input.equals("LIST")) {
 
             List<Employee> employeeList = employeeRepository.readEmployees();
             employeeList.forEach(employee -> {
                 output.println(employee);
-            } );
-        } else if (input.equals("NEW ACC")){
+            });
+
+        } else if (input.equals("NEW ACC")) {
             Employee employee = createNewEmployee();
             employeeRepository.saveEmployee(employee);
             printEmployee(employee);
-    }
+
+        } else if (input.contains("TOP")) {
+            int defaultTopEarning = 5;
+            output.println(topEmployees.getTopEarningEmployees(defaultTopEarning));
+
+        } else if (input.equals("READ " + String.valueOf(employeeName))) {
+
+
+        }
+
+        // Falls TOP dann frage nach N (also wie viele Employees) und schreibe in die Konsole die Top N Verdiener mit Name + Verdienst pro Monat
 
     }
 

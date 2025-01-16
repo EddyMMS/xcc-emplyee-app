@@ -1,8 +1,8 @@
 package tech.mms.cos.repository;
 
-import java.util.List;
-
 import tech.mms.cos.model.Employee;
+
+import java.util.List;
 
 public interface EmployeeRepository {
 

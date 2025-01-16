@@ -2,8 +2,6 @@ package tech.mms.cos.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Objects;
-
 public class Name {
     private String firstName;
     private String middleName;
@@ -17,18 +15,18 @@ public class Name {
         this.validate();
     }
 
-    private Name(){
+    private Name() {
 
     }
 
     public void validate() {
-        if(getFirstName() == null || getFirstName().isBlank()) {
+        if (getFirstName() == null || getFirstName().isBlank()) {
             throw new RuntimeException("First Name is not valid!");
         }
-        if(getMiddleName() != null && getMiddleName().isBlank()) {
+        if (getMiddleName() != null && getMiddleName().isBlank()) {
             throw new RuntimeException("Middle Name is not valid!");
         }
-        if(getLastName() == null || getLastName().isBlank()) {
+        if (getLastName() == null || getLastName().isBlank()) {
             throw new RuntimeException("Last Name is not valid!");
         }
     }
@@ -46,7 +44,7 @@ public class Name {
     }
 
     @JsonIgnore
-    public String getFullName(){
+    public String getFullName() {
         if (getMiddleName() == null) {
             return getLastName() + ", " + getFirstName();
         }
