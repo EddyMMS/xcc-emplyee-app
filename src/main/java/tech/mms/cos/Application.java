@@ -62,8 +62,6 @@ public class Application {
 
         }
 
-        // Falls TOP dann frage nach N (also wie viele Employees) und schreibe in die Konsole die Top N Verdiener mit Name + Verdienst pro Monat
-
     }
 
     public static Employee createNewEmployee() {

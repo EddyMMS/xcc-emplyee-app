@@ -5,6 +5,7 @@ import tech.mms.cos.io.CombinedOutputWriter;
 import tech.mms.cos.io.ConsoleOutputWriter;
 import tech.mms.cos.io.FileOutputWriter;
 import tech.mms.cos.repository.FileEmployeeRepository;
+import tech.mms.cos.repository.MongoEmployeeRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class ServiceLocator {
     private ServiceLocator() {
         this.put("ApplicationConfig", ApplicationConfigReader.getConfig());
 
-        this.put("EmployeeRepository", new FileEmployeeRepository(this.get("ApplicationConfig")));
+        this.put("EmployeeRepository", MongoEmployeeRepository.get());
 
         this.put("ConsoleOutputWriter", new ConsoleOutputWriter());
         this.put("FileOutputWriter", new FileOutputWriter(this.get("ApplicationConfig")));

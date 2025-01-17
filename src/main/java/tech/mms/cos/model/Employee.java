@@ -2,27 +2,19 @@ package tech.mms.cos.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.mongojack.Id;
+import org.mongojack.ObjectId;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
-
-/*
-TODO Constructor hinzufuegen
-
-TODO firstName, middleName, lastName -> Eigene Klasse
-
-TODO Alle Attribute sind private -> Kapselung! Getter!
-
-TODO Inhalt der Variablen beim erstellen des Employees pruefen
-    hourlyRate + hoursPerWeek > 0
-    firstName, lastName nicht null
-    Birthdate darf nicht in Zukunft liegen oder Employee juenger als 14
-    Falls irgendwas nicht zutrifft RuntimeException schmeissen
- */
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee {
+
+    @Id
+    private String uuid;
 
     private LocalDate birthdate;
     private double hourlyRate;
@@ -31,12 +23,14 @@ public class Employee {
     private Genders gender;
     private Name name;
 
+
     public Employee(LocalDate birthdate, double hourlyRate, int hoursPerWeek, Genders gender, Name name) {
         this.birthdate = birthdate;
         this.hourlyRate = hourlyRate;
         this.hoursPerWeek = hoursPerWeek;
         this.gender = gender;
         this.name = name;
+        this.uuid = UUID.randomUUID().toString();
 
         validate();
     }
@@ -104,37 +98,9 @@ public class Employee {
     public Name getName() {
         return name;
     }
+
+    public String getUuid() {
+        return uuid;
+    }
 }
-
-    /*
-        String surname;
-        String middlename;
-        String lastname;
-
-        int age;
-        String gender;
-        int hourlyrate;
-        int hoursweek;
-
-    public Personal(String surname, String middlename, String lastname, int age, String gender,int hourlyrate,
-        int hoursweek){
-
-        this.surname = surname;
-        this.middlename = middlename;
-        this.lastname = lastname;
-        this.age = age;
-
-        if (gender == "m" || gender == "f" || gender == "d") {
-            this.gender = gender;
-        } else {
-            System.out.println("Invalid gender! Please enter only 1 character! (m/f/d)");
-        }
-
-        this.hourlyrate = hourlyrate;
-        this.hoursweek = hoursweek;
-
-
-            }
-
-     */
 
