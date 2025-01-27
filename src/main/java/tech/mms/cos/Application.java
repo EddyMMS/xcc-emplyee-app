@@ -12,6 +12,53 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Exercises:
+ *
+ * Make Spring Boot Project (Start spring boot service from main function)
+ * - What is a maven (mvn) parent
+ * - What are libraries
+ * - What is spring-web
+ * - What is a controller
+ * - What is a port (network)
+ * - What is a RestAPI
+ * - What is a bean
+ * - What is a singleton
+ *
+ * Create a controller
+ * - Return "Test" String from a controller. Called over Postman
+ * - Return a dummy employee
+ *
+ * ----
+ *
+ * ServiceLocator
+ * - Remove the ServiceLocator. How does the ServiceLocator work in Spring?
+ *
+ * Beans
+ * - Make all impls of OutputWriter a Bean. Make ConsoleOutputWriter the primary Bean. (@Primary)
+ * - Make all impls of EmployeeRepository a Bean. Make MongoEmployeeRepository the primary Bean.
+ * - Make all beans use dependency injection.
+ *
+ * Configuration
+ * - What is application.yaml in spring ?
+ * - What is a profile in spring configuration?
+ * - Change the Configuration to read from application.yaml
+ *
+ * MongoDB
+ * - Instead of using mongojack for connecting to mongodb use spring boot mongodb library (Füge maven library hinzu)
+ * - Make the MongoEmployeeRepository work
+ *
+ * Error Handling
+ * - What is an Exception. What is a Runtimeexception. What is the difference? What is a Throwable?
+ * - Create a controller Advice. What is it, what does it do, what happens if we dont use it? -> Make the dummy employee returned by the controller be too young to work, meaning an Exception is thrown -> Call this endpoint with Postman. What happens?
+ * - Return a nice ZalandoProblem to the api consumer if an Throwable is thrown (Maven Dependency hinzufügen)
+ *
+ * Logging
+ * - Use Log4J & Logback. What is Log4J, what is Logback?
+ * - Configure Logback to format logging output differently (choose any format you want, make the time be in red)
+ *
+ */
+
 public class Application {
 
     private static OutputWriter output;
