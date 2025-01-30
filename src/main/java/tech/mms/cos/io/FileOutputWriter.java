@@ -1,11 +1,13 @@
 package tech.mms.cos.io;
 
-import tech.mms.cos.repository.Config;
+import org.springframework.stereotype.Component;
+import tech.mms.cos.config.Config;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@Component
 public class FileOutputWriter implements OutputWriter {
 
     private final String logFilePath;

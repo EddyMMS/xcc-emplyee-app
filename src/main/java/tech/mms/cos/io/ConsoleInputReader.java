@@ -1,7 +1,10 @@
 package tech.mms.cos.io;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Scanner;
 
+@Component
 public class ConsoleInputReader {
 
     Scanner scanner = new Scanner(System.in);

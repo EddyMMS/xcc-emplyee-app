@@ -1,56 +1,78 @@
 package tech.mms.cos;
 
-import tech.mms.cos.io.ApplicationConfigReader;
 import tech.mms.cos.io.ConsoleInputReader;
 import tech.mms.cos.io.OutputWriter;
-import tech.mms.cos.model.Employee;
-import tech.mms.cos.model.Genders;
-import tech.mms.cos.model.Name;
-import tech.mms.cos.repository.EmployeeRepository;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * Exercises:
  *
  * Make Spring Boot Project (Start spring boot service from main function)
+ *
  * - What is a maven (mvn) parent
+ * --- Dies ist eine Vorlage, von der andere Projekte erben können. (Gemeinsame Konfigurationen und Abhängigkeiten können damit verwaltet werden.)
+ *
  * - What are libraries
+ * --- Sammlungen von vorgefertigtem Code, den Entwickler verwenden können, um Funktionen zu ihren eigenen Programmen hinzuzufügen
+ *
  * - What is spring-web
+ * --- ist ein Modul des Spring-Frameworks, das Werkzeuge zum Erstellen von Webanwendungen, einschließlich RESTful-Diensten, bereitstellt.
+ *
  * - What is a controller
+ * --- Ein Controller ist eine Komponente, die Benutzeranfragen verarbeitet, sie bearbeitet und entsprechende Antwort zurückgibt
+ *
  * - What is a port (network)
+ * --- Virtueller Punkt, an dem Netzwerkverbindungen beginnen und enden
+ *
  * - What is a RestAPI
+ * --- Representational State Transfer Application Programming Interface === ermöglicht es verschied. Softwaresystemen über das Internet zu kommunizieren
+ *
  * - What is a bean
+ *--- Ein Objekt, das vom Spring-Container verwaltet wird (Wird von Spring erstellt und verwaltet)
+ *
  * - What is a singleton
+ * --- Muster in der Programmierung, dass eine Klasse nur eine Instanz hat und nur einen globalen Zugriffspunkt darauf bietet
  *
  * Create a controller
  * - Return "Test" String from a controller. Called over Postman
- * - Return a dummy employee
+ * - Return a getDummy employee
  *
  * ----
  *
  * ServiceLocator
- * - Remove the ServiceLocator. How does the ServiceLocator work in Spring?
+ * - Remove the ServiceLocator. How does the ServiceLocator work in Spring? ( Google: Spring boot dependency injection, how does it work in spring boot, dependency injection constructor injection spring boot, spring boot @Component)
  *
  * Beans
  * - Make all impls of OutputWriter a Bean. Make ConsoleOutputWriter the primary Bean. (@Primary)
  * - Make all impls of EmployeeRepository a Bean. Make MongoEmployeeRepository the primary Bean.
  * - Make all beans use dependency injection.
  *
+ *
  * Configuration
  * - What is application.yaml in spring ?
+ * --- Das ist eine Konfigurationsdatei in Spring Boot, in welcher man verschiedene EInstellung der App festlegt. (Leicht änderbar)
+ *
  * - What is a profile in spring configuration?
+ * --- Mit Profilen kann man unterschiedliche Konfigurationen für verschied. Umgebungen verwenden.
+ *
  * - Change the Configuration to read from application.yaml
+ *
+ *
+ *  -----------------------
  *
  * MongoDB
  * - Instead of using mongojack for connecting to mongodb use spring boot mongodb library (Füge maven library hinzu)
  * - Make the MongoEmployeeRepository work
  *
+ *  -----------------------------
+ *
+ *  Create all common HTTP Method Controller functions
+ *  - "/employees" -> GET => Gibt alle employees zurück ; POST -> Anleigen eines neuen Employees (Employee als Methoden Parameter / body)
+ *  - "/employees/{uuid}" -> DELETE => Lösche den Employee mit dieser UUID
+ *  - "/employees/{uuid}" -> GET => Returne den Employee mit dieser UUID
+ *
  * Error Handling
  * - What is an Exception. What is a Runtimeexception. What is the difference? What is a Throwable?
- * - Create a controller Advice. What is it, what does it do, what happens if we dont use it? -> Make the dummy employee returned by the controller be too young to work, meaning an Exception is thrown -> Call this endpoint with Postman. What happens?
+ * - Create a controller Advice. What is it, what does it do, what happens if we dont use it? -> Make the getDummy employee returned by the controller be too young to work, meaning an Exception is thrown -> Call this endpoint with Postman. What happens?
  * - Return a nice ZalandoProblem to the api consumer if an Throwable is thrown (Maven Dependency hinzufügen)
  *
  * Logging
@@ -63,8 +85,10 @@ public class Application {
 
     private static OutputWriter output;
     private static ConsoleInputReader reader;
-
+ /*
     public static void main(String[] args) {
+
+        /*
 
         if (args.length == 1) {
             String configFileName = args[0];
@@ -72,6 +96,7 @@ public class Application {
         }
 
         ApplicationConfigReader.getConfig();
+
 
         output = ServiceLocator.getInstance().get("OutputWriter");
         reader = new ConsoleInputReader();
@@ -188,5 +213,6 @@ public class Application {
     }
 
 
+         */
 }
 

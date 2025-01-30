@@ -1,10 +1,20 @@
 package tech.mms.cos.repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import jakarta.annotation.PostConstruct;
 import org.bson.UuidRepresentation;
-import org.mongojack.JacksonMongoCollection;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.json.Converter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 import tech.mms.cos.model.Employee;
 
 import java.util.ArrayList;
@@ -40,33 +50,41 @@ mithilfe seiner Struktur.
 Ein Shard ist eine Unterteilung der Datenbank um Daten auf mehrere Server zu verteilen.
  */
 
+@Primary
+@Repository
+public interface MongoEmployeeRepository extends MongoRepository<Employee, String>, EmployeeRepository {
 
+    @Override
+    default void saveEmployee(Employee employee) {
+        this.save(employee);
+    }
+
+    @Override
+    default List<Employee> readEmployees() {
+        return this.findAll();
+    }
+
+}
+
+/*
+@Primary
+@Repository
 public class MongoEmployeeRepository implements EmployeeRepository {
 
     private static MongoEmployeeRepository mongoEmployeeRepository;
+    private final MappingMongoConverter mappingMongoConverter;
 
-    private JacksonMongoCollection<Employee> coll;
+    private MongoCollection<Employee> coll;
 
-    private MongoEmployeeRepository() {
+    public MongoEmployeeRepository(MongoClient mongoClient) {
         String connection = "mongodb://localhost:27017";
         MongoClient mongoClient = MongoClients.create(connection);
         MongoDatabase database = mongoClient.getDatabase("management-app");
-
-        this.coll = JacksonMongoCollection.builder()
-                .build(database, "employees", Employee.class, UuidRepresentation.STANDARD);
-    }
-
-    public static MongoEmployeeRepository get() {
-        if (mongoEmployeeRepository == null) {
-            mongoEmployeeRepository = new MongoEmployeeRepository();
-        }
-
-        return mongoEmployeeRepository;
     }
 
     @Override
     public void saveEmployee(Employee employee) {
-        coll.save(employee);
+        coll.insertOne(employee);
     }
 
     @Override
@@ -75,3 +93,4 @@ public class MongoEmployeeRepository implements EmployeeRepository {
     }
 
 }
+*/

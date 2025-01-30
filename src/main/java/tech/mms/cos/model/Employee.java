@@ -2,8 +2,7 @@ package tech.mms.cos.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

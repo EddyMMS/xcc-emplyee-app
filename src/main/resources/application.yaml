@@ -1,0 +1,12 @@
+
+
+app:
+  employeeRepoFilename: employee.json
+  outputFilePath: output.txt
+
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: management-app

@@ -2,7 +2,9 @@ package tech.mms.cos.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import tech.mms.cos.config.Config;
 import tech.mms.cos.model.Employee;
 
 import java.io.File;
@@ -10,14 +12,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class FileEmployeeRepository implements EmployeeRepository {
 
-    File file;
-    ObjectMapper objectMapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule());
+    private final ObjectMapper objectMapper;
 
-    public FileEmployeeRepository(Config config) {
+    private final File file;
+
+    public FileEmployeeRepository(Config config, ObjectMapper objectMapper) {
         file = new File(config.getEmployeeRepoFilename());
+        this.objectMapper = objectMapper;
     }
 
     @Override

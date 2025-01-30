@@ -1,4 +1,4 @@
-import tech.mms.cos.repository.Config;
+import tech.mms.cos.config.Config;
 import tech.mms.cos.repository.FileEmployeeRepository;
 
 public class TestFileEmployeeRepository {

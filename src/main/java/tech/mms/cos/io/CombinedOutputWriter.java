@@ -1,5 +1,8 @@
 package tech.mms.cos.io;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class CombinedOutputWriter implements OutputWriter {
 
     private final FileOutputWriter fileOutputWriter;
