@@ -70,10 +70,28 @@ import tech.mms.cos.io.OutputWriter;
  *  - "/employees/{uuid}" -> DELETE => Lösche den Employee mit dieser UUID
  *  - "/employees/{uuid}" -> GET => Returne den Employee mit dieser UUID
  *
+ * ---------------
+ *
  * Error Handling
- * - What is an Exception. What is a Runtimeexception. What is the difference? What is a Throwable?
- * - Create a controller Advice. What is it, what does it do, what happens if we dont use it? -> Make the getDummy employee returned by the controller be too young to work, meaning an Exception is thrown -> Call this endpoint with Postman. What happens?
+ * - What is an Exception. What is a Runtimeexception. What is the difference between Exception and RuntimeException? What is a Throwable?
+ * --- Eine Exception signalisiert einen Fehlerzustand, der die normale Ausführung eines Programms unterbricht.
+ * --- Eine RuntimeException ist eine spez. Art von Exception, die während der Laufzeit auftreten kann und nicht explizit
+ * behandelt werden muss
+ * --- Ein Throwable ist die Basisklasse für alle Fehler und Ausnahmen in Java
+ *
+ * - Rework "validate" function of Employee. Throw new own Exception (neue Klasse) AppValidationException.
+ *
+ *
+ * - Create a controller Advice (Google: @ControllerAdvice). What is it, what does it do, what happens if we dont use it?
+ *--- Es ermöglicht zentralisierte Fehlerbehandlung in Spring
+ *--- Ohne, müsste jede Controller Klasse eine eigene Fehlerbehandlung definieren
+ *
+ * - Make ControllerAdvice catch the App Exception and return Bad Request to caller. ResponseEntity<Void>
+ *
  * - Return a nice ZalandoProblem to the api consumer if an Throwable is thrown (Maven Dependency hinzufügen)
+ * anstatt bad request(leerer body) -> zalandoproblem ResponseEntity<Problem>
+ *
+ *
  *
  * Logging
  * - Use Log4J & Logback. What is Log4J, what is Logback?

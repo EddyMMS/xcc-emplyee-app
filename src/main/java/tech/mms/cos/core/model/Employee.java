@@ -1,8 +1,9 @@
-package tech.mms.cos.model;
+package tech.mms.cos.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
+import tech.mms.cos.exception.AppValidationException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,18 +44,18 @@ public class Employee {
         return getFullName() + "\t |" + getAge() + "yo\t |" + getGender();
     }
 
-    private void validate() {
+    private void validate() throws AppValidationException {
         this.name.validate();
         if (getHoursPerWeek() < 0) {
-            throw new RuntimeException("Hours per Week is not valid!");
+            throw new AppValidationException("Hours per Week is not valid!");
         }
         if (getHourlyRate() < 0) {
-            throw new RuntimeException("Hours per Week is not valid!");
+            throw new AppValidationException("Hours per Week is not valid!");
         }
         if (birthdate.isAfter(LocalDate.now())) {
-            throw new RuntimeException("The date you entered is in the future! Please enter a valid birthdate!");
+            throw new AppValidationException("The date you entered is in the future! Please enter a valid birthdate!");
         } else if (this.getAge() < 14) {
-            throw new RuntimeException("You're too young to work!");
+            throw new AppValidationException("You're too young to work!");
         }
     }
 

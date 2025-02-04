@@ -1,7 +1,7 @@
-package tech.mms.cos;
+package tech.mms.cos.core;
 
-import tech.mms.cos.model.Employee;
-import tech.mms.cos.model.Genders;
+import tech.mms.cos.core.model.Employee;
+import tech.mms.cos.core.model.Genders;
 import tech.mms.cos.repository.EmployeeRepository;
 
 import java.util.Comparator;

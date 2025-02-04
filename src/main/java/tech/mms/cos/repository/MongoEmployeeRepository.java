@@ -1,24 +1,13 @@
 package tech.mms.cos.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import jakarta.annotation.PostConstruct;
-import org.bson.UuidRepresentation;
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.json.Converter;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import tech.mms.cos.model.Employee;
+import tech.mms.cos.core.model.Employee;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 // Anlegen eines neuen Eompoyees ßber das Programm in der MongoDB (Nutzung des ServiceLocators) (NoSQLBOoster)
 // Was ist eine ID, Was ist eine UUID
@@ -55,13 +44,27 @@ Ein Shard ist eine Unterteilung der Datenbank um Daten auf mehrere Server zu ver
 public interface MongoEmployeeRepository extends MongoRepository<Employee, String>, EmployeeRepository {
 
     @Override
-    default void saveEmployee(Employee employee) {
-        this.save(employee);
+    default Employee saveEmployee(Employee employee) {
+        return this.save(employee);
     }
 
     @Override
     default List<Employee> readEmployees() {
         return this.findAll();
+    }
+
+    @Override
+    default Optional<Employee> find(UUID uuid) {
+        return this.findById(uuid.toString());
+    }
+
+    @Override
+    default boolean deleteEmployee(UUID uuid) {
+        return this.find(uuid)
+                .map(employee -> {
+                    this.deleteById(employee.getUuid());
+                    return true;
+                }).orElse(false);
     }
 
 }

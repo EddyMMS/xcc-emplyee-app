@@ -1,4 +1,4 @@
-package tech.mms.cos.model;
+package tech.mms.cos.core.model;
 
 public enum Genders {
     M,
