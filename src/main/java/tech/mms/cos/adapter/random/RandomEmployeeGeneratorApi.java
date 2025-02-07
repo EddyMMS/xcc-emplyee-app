@@ -15,7 +15,7 @@ import java.time.LocalDate;
 /**
  * https://editor.swagger.io/ <- Spielwiese
  * Swagger / OpenApi
- * mvn o^^^^^^^^^^^^^^^^^^^^^^^^^^pen api generator plugin
+ * mvn open api generator plugin
  *
  */
 

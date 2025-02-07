@@ -1,0 +1,150 @@
+openapi: 3.0.3
+info:
+  title: management-app
+  description: API for managing employees
+  version: 1.0.11
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+paths:
+  /employees:
+    get:
+      summary: Get all employees
+      operationId: listAllEmployees
+      responses:
+        '200':
+          description: A list of employees
+          content:
+            application/json:
+              schema:
+                type: list
+                items:
+                  $ref: '#/components/schemas/Employee'
+    post:
+      summary: Create a new employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEmployeeRequest'
+      responses:
+        '201':
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+
+  /employees/{uuid}:
+    get:
+      summary: Get an employee by UUID
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single employee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Employee not found
+    put:
+      summary: Update an employee by UUID
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Employee updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Employee not found
+    delete:
+      summary: Delete an employee by UUID
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Employee deleted
+        '404':
+          description: Employee not found
+
+components:
+  schemas:
+    NewEmployeeRequest:
+      type: object
+      properties:
+        birthdate:
+          type: string
+          format: LocalDate
+        hourlyRate:
+          type: number
+          format: double
+          minimum: 0
+        hoursPerWeek:
+          type: integer
+        gender:
+          type: string
+          enum:
+            - M
+            - W
+            - D
+        name:
+          $ref: '#/components/schemas/Name'
+    Employee:
+      type: object
+      properties:
+        uuid:
+          type: string
+        birthdate:
+          type: string
+          format: LocalDate
+        hourlyRate:
+          type: number
+          format: double
+          minimum: 0
+        hoursPerWeek:
+          type: integer
+        monthlySalary:
+          type: number
+          format: double
+        gender:
+          type: string
+          enum:
+            - M
+            - W
+            - D
+        name:
+          $ref: '#/components/schemas/Name'
+    Name:
+      type: object
+      properties:
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string

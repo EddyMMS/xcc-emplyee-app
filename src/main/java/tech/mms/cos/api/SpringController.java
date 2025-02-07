@@ -2,8 +2,10 @@ package tech.mms.cos.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.mms.cos.api.client.EmployeesApi;
 import tech.mms.cos.api.mapper.EmployeeApiMapper;
-import tech.mms.cos.api.model.NewEmployeeRequest;
+import tech.mms.cos.api.model.EmployeeDTO;
+import tech.mms.cos.api.model.NewEmployeeRequestDTO;
 import tech.mms.cos.core.RandomEmployeeService;
 import tech.mms.cos.core.model.Employee;
 import tech.mms.cos.core.model.Name;
@@ -16,7 +18,7 @@ import java.util.UUID;
 import static tech.mms.cos.core.model.Genders.M;
 
 @RestController
-public class SpringController {
+public class SpringController implements EmployeesApi {
 
     private final EmployeeRepository employeeRepository;
     private final RandomEmployeeService employeeGeneratorApi;
@@ -48,18 +50,36 @@ public class SpringController {
         return employeeGeneratorApi.generate();
     }
 
-    @GetMapping("/employees")
-    public List<Employee> getEmployees(){
-        return employeeRepository.readEmployees();
-    };
 
-    @GetMapping("/employees/{id}")
-    public ResponseEntity<Employee> getEmployeeByUUID(@PathVariable String id) {
+
+
+
+
+    @Override
+    public ResponseEntity<EmployeeDTO> employeesPost(NewEmployeeRequestDTO employeeDTO) {
+        Employee employee = employeeRepository.saveEmployee(EmployeeApiMapper.mapRequest(employeeDTO));
+        return ResponseEntity.ok(EmployeeApiMapper.mapResponse(employee));
+    }
+
+    @Override
+    public ResponseEntity<Void> employeesUuidDelete(String uuid) {
+        var wasDeleted = employeeRepository.deleteEmployee(UUID.fromString(uuid));
+
+        if (wasDeleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Override
+    public ResponseEntity<EmployeeDTO> employeesUuidGet(String uuid) {
 
         try {
-            UUID uuid = UUID.fromString(id);
+            UUID id = UUID.fromString(uuid);
 
-            return employeeRepository.find(uuid)
+            return employeeRepository.find(id)
+                    .map(EmployeeApiMapper::mapResponse)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
 
@@ -68,23 +88,19 @@ public class SpringController {
         }
     }
 
-    @DeleteMapping("/employees/{uuid}")
-    public ResponseEntity<Void> deleteEmployeeByUUID(@PathVariable UUID uuid){
-        var wasDeleted = employeeRepository.deleteEmployee(uuid);
+    @Override
+    public ResponseEntity<EmployeeDTO> employeesUuidPut(String uuid, EmployeeDTO employeeDTO) {
+        return null; //TODO
+    }
 
-        if (wasDeleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-
-    };
-
-    @PostMapping("/employees")
-    public ResponseEntity<Employee> createEmployee(@RequestBody NewEmployeeRequest newEmployee){
-        Employee employee = employeeRepository.saveEmployee(EmployeeApiMapper.mapRequest(newEmployee));
-        return ResponseEntity.ok(employee);
-    };
+    @Override
+    public ResponseEntity<List<EmployeeDTO>> listAllEmployees() {
+        var employees = employeeRepository.readEmployees();
+        return ResponseEntity.ok(employees.stream()
+                .map(EmployeeApiMapper::mapResponse)
+                .toList()
+        );
+    }
 
 
 }
