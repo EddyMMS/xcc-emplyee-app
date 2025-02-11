@@ -25,7 +25,14 @@
             <artifactId>openapi-generator-maven-plugin</artifactId>
             <version>7.11.0</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -34,7 +41,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
-            <version>3.4.2</version>
         </dependency>
 
         <dependency>
@@ -73,6 +79,18 @@
             <artifactId>jakarta.persistence-api</artifactId>
             <version>3.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.16</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -86,13 +104,13 @@
                 <version>7.11.0</version>
                 <executions>
                     <execution>
-                        <id>generate-spec</id>
+                        <id>generate-api</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
                             <modelNameSuffix>DTO</modelNameSuffix>
-                            <inputSpec>${project.basedir}/src/main/resources/api1.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api-spec.yaml</inputSpec>
                             <modelPackage>tech.mms.cos.api.model</modelPackage>
                             <apiPackage>tech.mms.cos.api.client</apiPackage>
                             <generatorName>spring</generatorName>
@@ -112,6 +130,33 @@
                                 <java8>true</java8>
                                 <library>spring-cloud</library>
                                 <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-random-user-api</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <modelNameSuffix>DTO</modelNameSuffix>
+                            <modelNamePrefix>RandomEmployee</modelNamePrefix>
+                            <inputSpec>${project.basedir}/src/main/resources/random-employee-spec.yaml</inputSpec>
+                            <modelPackage>tech.mms.cos.adapter.random.model</modelPackage>
+                            <apiPackage>tech.mms.cos.adapter.random.client</apiPackage>
+                            <generatorName>java</generatorName>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApis>true</generateApis>
+                            <generateModels>true</generateModels>
+                            <generateModelTests>false</generateModelTests>
+                            <skipValidateSpec>true</skipValidateSpec>
+                            <configOptions>
+                                <useJakartaEe>true</useJakartaEe>
+                                <sourceFolder>src/java/main</sourceFolder>
+                                <interfaceOnly>true</interfaceOnly>
+                                <java8>true</java8>
+                                <library>resttemplate</library>
+                                <openApiNullable>false</openApiNullable>
                             </configOptions>
                         </configuration>
                     </execution>

@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: management-app
+  description: API for managing employees
+  version: 1.0.11
+servers:
+  - url: https://randomuser.me/
+    description: Local server
+
+paths:
+  /api/:
+    get:
+      summary: Get random employees
+      operationId: getRandomEmployees
+      tags:
+        - RandomEmployee
+      responses:
+        '200':
+          description: A list of employees
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Results'
+
+components:
+  schemas:
+    Results:
+      type: object
+      required:
+        - results
+      properties:
+        results:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Employee'
+    Employee:
+      type: object
+      required:
+        - gender
+        - name
+      properties:
+        gender:
+          $ref: '#/components/schemas/Gender'
+        name:
+          $ref: '#/components/schemas/Name'
+    Name:
+      type: object
+      required:
+        - title
+        - first
+        - last
+      properties:
+        title:
+          type: string
+        first:
+          type: string
+        last:
+          type: string
+    Gender:
+      type: string
+      x-extensible-enum:
+        - male
+        - female

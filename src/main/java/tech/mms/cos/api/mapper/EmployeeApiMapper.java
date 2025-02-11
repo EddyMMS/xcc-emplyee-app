@@ -1,10 +1,8 @@
 package tech.mms.cos.api.mapper;
 
-import org.joda.time.DateTime;
-import tech.mms.cos.api.client.EmployeesApi;
+
 import tech.mms.cos.api.model.EmployeeDTO;
 import tech.mms.cos.api.model.NameDTO;
-import tech.mms.cos.api.model.NewEmployeeRequest;
 import tech.mms.cos.api.model.NewEmployeeRequestDTO;
 import tech.mms.cos.core.model.Employee;
 import tech.mms.cos.core.model.Genders;
