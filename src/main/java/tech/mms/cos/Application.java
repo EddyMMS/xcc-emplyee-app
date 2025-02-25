@@ -99,6 +99,30 @@ import tech.mms.cos.io.OutputWriter;
  *
  */
 
+/**
+ * Write a JUnit test. What is a Unit Test?
+ * - Ein Unit-Test dient dazu, einzelne Teile eines Programms zu testen, damit möchte man
+ * einzelne Komponente überprüfen
+ *
+ * -> getAverageAge(List<Employee> employeeList) -> employeeRepository = null
+ * -> Test als Parametrized Test -> https://www.baeldung.com/parameterized-tests-junit-5
+ * -> getAverageAge() -> employeeRepository = mock()
+ *
+ * import static org.mockito.Mockito.*;
+ *
+ * List<String> mockedList = mock(EmployeeRepostiory.class);
+ * when(mockedList.get(0)).thenReturn("Hello, World!");
+ *
+ * System.out.println(mockedList.get(0)); // Gibt "Hello, World!" aus
+ *
+ * Write a Spring Boot integration Test. What is a integration test? how it differs from Unit Test?
+ * -> getAverage() aber als Integration Test! Hint: Datenbank muss local laufen. Nicht TopEmployees selber erstellen sondern injecten lassen! Warum funktioniert Dependency Injecten hier aber nicht in Unit Tests?
+ * -> Keine Mocks! Füge Employees in die Datenbank vor dem Test und leere die Datenbank nach den Tests.
+ * -> flapdoodle spring -> Startet eine MondoDB automatisch beim Starten deiner Tests in Memory, löschen nach den Tests. -> Ausschalten der lokalen Datenbank!
+ * -> Wiremock. -> Testen des RandomEmployeeGeneratorApi mit Wiremock.
+ *
+ */
+
 public class Application {
 
     private static OutputWriter output;

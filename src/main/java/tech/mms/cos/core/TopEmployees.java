@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TopEmployees {
 
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
     public TopEmployees(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
@@ -29,6 +29,10 @@ public class TopEmployees {
 
         // Gleiche Funktion bloß ohne Streams
         List<Employee> employeeList = employeeRepository.readEmployees();
+        return getAverageAge(employeeList);
+    }
+
+    public double getAverageAge(List<Employee> employeeList) {
 
         int totalAge = 0;
         int count = 0;
@@ -40,17 +44,7 @@ public class TopEmployees {
 
         return count > 0 ? (double) totalAge / count : 0.0;
 
-
-       /* return employeeList.stream()
-                .map(Employee::getAge)
-                .mapToInt(Integer::intValue)
-                .average()
-                .orElse(0.0);
-
-        */
     }
-
-    ;
 
 
     // Ohne Streams / Collector
