@@ -44,13 +44,14 @@ public class Employee {
         return getFullName() + "\t |" + getAge() + "yo\t |" + getGender();
     }
 
-    private void validate() throws AppValidationException {
+    public void validate() throws AppValidationException {
         this.name.validate();
+
         if (getHoursPerWeek() < 0) {
             throw new AppValidationException("Hours per Week is not valid!");
         }
         if (getHourlyRate() < 0) {
-            throw new AppValidationException("Hours per Week is not valid!");
+            throw new AppValidationException("Hourly Rate is not valid!");
         }
         if (birthdate.isAfter(LocalDate.now())) {
             throw new AppValidationException("The date you entered is in the future! Please enter a valid birthdate!");
@@ -58,6 +59,9 @@ public class Employee {
             throw new AppValidationException("You're too young to work!");
         }
     }
+
+    // TODO: EMPLOYEE TESTEN -> 100 % (sinnvoll)
+    // TODO: NAME TESTEN -> 100 % (sinnvoll)
 
     @JsonIgnore
     public int getAge() {

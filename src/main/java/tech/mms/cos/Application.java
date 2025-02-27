@@ -101,7 +101,7 @@ import tech.mms.cos.io.OutputWriter;
 
 /**
  * Write a JUnit test. What is a Unit Test?
- * - Ein Unit-Test dient dazu, einzelne Teile eines Programms zu testen, damit möchte man
+ * --- Ein Unit-Test dient dazu, einzelne Teile eines Programms zu testen, damit möchte man
  * einzelne Komponente überprüfen
  *
  * -> getAverageAge(List<Employee> employeeList) -> employeeRepository = null
@@ -109,14 +109,19 @@ import tech.mms.cos.io.OutputWriter;
  * -> getAverageAge() -> employeeRepository = mock()
  *
  * import static org.mockito.Mockito.*;
- *
  * List<String> mockedList = mock(EmployeeRepostiory.class);
  * when(mockedList.get(0)).thenReturn("Hello, World!");
- *
  * System.out.println(mockedList.get(0)); // Gibt "Hello, World!" aus
  *
+ *
  * Write a Spring Boot integration Test. What is a integration test? how it differs from Unit Test?
- * -> getAverage() aber als Integration Test! Hint: Datenbank muss local laufen. Nicht TopEmployees selber erstellen sondern injecten lassen! Warum funktioniert Dependency Injecten hier aber nicht in Unit Tests?
+ * --- Ein Integration Test überprüft die Zusammenarbeit zwischen verschied. Komponenten oder Systemen innerhalb eines Projekts.
+ * --- Unit Tests testen die kleinsten Teile eines Programms wie Funktionen oder Methoden und Integration Test testen die Interaktionen zwischen mehreren Komponenten
+ *
+ * -> getAverage() aber als Integration Test! Hint: Datenbank muss local laufen.
+ * Nicht TopEmployees selber erstellen sondern injecten lassen! Warum funktioniert Dependency Injecten hier aber nicht in Unit Tests?
+ *--- Dep. Inject. funktioniert idR. schon bei Unit Tests, kann allerdings relativ schnell komplex werden, Injection für Tests aufwändiger usw.
+ *
  * -> Keine Mocks! Füge Employees in die Datenbank vor dem Test und leere die Datenbank nach den Tests.
  * -> flapdoodle spring -> Startet eine MondoDB automatisch beim Starten deiner Tests in Memory, löschen nach den Tests. -> Ausschalten der lokalen Datenbank!
  * -> Wiremock. -> Testen des RandomEmployeeGeneratorApi mit Wiremock.

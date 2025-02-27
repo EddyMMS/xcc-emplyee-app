@@ -51,10 +51,6 @@ public class SpringController implements EmployeesApi {
     }
 
 
-
-
-
-
     @Override
     public ResponseEntity<EmployeeDTO> employeesPost(NewEmployeeRequestDTO employeeDTO) {
         Employee employee = employeeRepository.saveEmployee(EmployeeApiMapper.mapRequest(employeeDTO));

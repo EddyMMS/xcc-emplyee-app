@@ -27,8 +27,6 @@ public class EmployeeTest {
 
     EmployeeRepository employeeRepository = mock();
     TopEmployees topEmployees = new TopEmployees(employeeRepository);
-
-
     RandomEmployeeGeneratorApi randomEmployeeGeneratorApi = new RandomEmployeeGeneratorApi(new RestTemplate());
 
     static Employee provideEmployee = new Employee(
@@ -37,8 +35,6 @@ public class EmployeeTest {
             37,
             M,
             new Name("John", "Bob", "Man"));
-
-
 
     private List<Employee> provideEmployeeList() {
 
@@ -79,7 +75,7 @@ public class EmployeeTest {
     @Test
     public void testGetAverageAgeIfListIsEmpty() {
         double averageAge = topEmployees.getAverageAge(List.of());
-        assertEquals(0.0, averageAge);
+        assertEquals(0, averageAge);
     }
 
 
@@ -110,52 +106,38 @@ public class EmployeeTest {
 
         List<Employee> topEarner = topEmployees.getTopEarningEmployees(20);
 
-        assertEquals(2, topEarner.size());
+        assertEquals(3, topEarner.size());
         assertEquals(employee3, topEarner.get(0));
         assertEquals(employee2, topEarner.get(1));
 
-// TODO: Für negatives int und für zu hohes int  unudn d0
-        // TODO: Als parametrized test
     }
 
     static Stream<Arguments> employeeDataProvider() {
+        var employee1 = new TestEmployeeProvider.EmployeeBuilder().hourlyRate(5.5).hoursPerWeek(37).gender(M).build();
+        var employee2 = new TestEmployeeProvider.EmployeeBuilder().hourlyRate(10.0).hoursPerWeek(40).gender(W).build();
+        var employee3 = new TestEmployeeProvider.EmployeeBuilder().hourlyRate(12.5).hoursPerWeek(37).gender(M).build();
+        List<Employee> input = Arrays.asList(employee1, employee2, employee3);
+
         return Stream.of(
-                Arguments.of(2, 5.5, 37, 'M'),
-                Arguments.of(2, 10.0, 40, 'W'),
-                Arguments.of(2, 12.5, 37, 'M'),
-                Arguments.of(0, 12.5, 37, 'M'),
-                Arguments.of(10, 12.5, 37, 'M')
+                Arguments.of(input, 2, List.of(employee3, employee2)),
+                Arguments.of(input, 0, List.of()),
+                Arguments.of(input, -1, List.of()),
+                Arguments.of(input, 10, List.of(employee3, employee2, employee1))
         );
     }
 
     @ParameterizedTest
     @MethodSource("employeeDataProvider")
-    public void testTopEarningEmployees(int n) {
-        var employee1 = new TestEmployeeProvider.EmployeeBuilder().hourlyRate(5.5).hoursPerWeek(37).gender(M).build();
-        var employee2 = new TestEmployeeProvider.EmployeeBuilder().hourlyRate(10.0).hoursPerWeek(40).gender(W).build();
-        var employee3 = new TestEmployeeProvider.EmployeeBuilder().hourlyRate(12.5).hoursPerWeek(37).gender(M).build();
+    public void testTopEarningEmployees(List<Employee> input, int n, List<Employee> expectedOutput) {
 
-        when(employeeRepository.readEmployees()).thenReturn(Arrays.asList(employee1, employee2, employee3));
+        when(employeeRepository.readEmployees()).thenReturn(input);
 
         List<Employee> topEarner = topEmployees.getTopEarningEmployees(n);
 
+        assertEquals(expectedOutput.size(), topEarner.size());
+        assertEquals(expectedOutput, topEarner);
 
-        if (n <= 0) {
-            assertEquals(0, topEarner.size());
-        } else {
-            assertEquals(Math.min(n, 3), topEarner.size());
-            if (n > 2) {
-                assertEquals(employee3, topEarner.get(0));
-                assertEquals(employee2, topEarner.get(1));
-            } else {
-                assertEquals(employee3, topEarner.get(0));
-                if (n == 2) {
-                    assertEquals(employee2, topEarner.get(1));
-                }
-            }
-        }
     }
-
 
     @Test
     public void testAvgSalByGen(){
@@ -170,11 +152,9 @@ public class EmployeeTest {
         double avgSalaryByMale = topEmployees.avgSalByGen(M);
         double avgSalaryByFemale = topEmployees.avgSalByGen(W);
 
-
         assertEquals(1332.0, avgSalaryByMale);
         assertEquals(1600.0, avgSalaryByFemale);
     }
-
 
     @Test
     public void testAvgSalbyAge(){
@@ -206,9 +186,6 @@ public class EmployeeTest {
         assertEquals(1338.0, avgSalarybyAge);
     }
 
-
-
-
     @Test
     public void testEmployeeRepositoryIsFilled() {
         List<Employee> employees = provideEmployeeList();
@@ -221,7 +198,6 @@ public class EmployeeTest {
         assertEquals(3, employees.size(), "expected to have 3 employees in the list");
     }
 
-
     @ParameterizedTest
     @MethodSource("provideAgeData")
     public void testAverageAge(List Employeee, double expectedAge) {
@@ -232,7 +208,6 @@ public class EmployeeTest {
         assertEquals(expectedAge, actual);
     }
 
-
     private static Stream<Arguments> provideAgeData() {
         return Stream.of(
                 Arguments.of(List.of(), 0.0),
@@ -240,6 +215,5 @@ public class EmployeeTest {
                 Arguments.of(2000, 25)
         );
     }
-
 
 }

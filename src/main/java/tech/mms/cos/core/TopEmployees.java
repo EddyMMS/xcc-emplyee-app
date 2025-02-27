@@ -2,6 +2,7 @@ package tech.mms.cos.core;
 
 import tech.mms.cos.core.model.Employee;
 import tech.mms.cos.core.model.Genders;
+import tech.mms.cos.io.OutputWriter;
 import tech.mms.cos.repository.EmployeeRepository;
 
 import java.util.Comparator;
@@ -21,7 +22,11 @@ public class TopEmployees {
 
         employeeList.sort(Comparator.comparingDouble(Employee::getMonthlySalary).reversed());
 
-        return employeeList.subList(0, Math.min(n, employeeList.size()));
+        if (n >= 0) {
+            return employeeList.subList(0, Math.min(n, employeeList.size()));
+        } else {
+            return employeeList.subList(0, 0);
+        }
 
     }
 
