@@ -2,7 +2,7 @@ name: Java Clean
 
 on:
   push:
-    braches:
+    branches:
       - main
 
 jobs:
