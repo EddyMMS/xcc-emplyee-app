@@ -70,5 +70,7 @@ public class FileEmployeeRepository implements EmployeeRepository {
         return false;
     }
 
-
+    @Override
+    public void clear() {
+    }
 }

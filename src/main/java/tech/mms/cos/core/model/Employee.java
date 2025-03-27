@@ -8,6 +8,7 @@ import tech.mms.cos.exception.AppValidationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.Objects;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -22,14 +23,16 @@ public class Employee {
     private double monthlySalary;
     private Genders gender;
     private Name name;
+    private String department;
 
 
-    public Employee(LocalDate birthdate, double hourlyRate, int hoursPerWeek, Genders gender, Name name) {
+    public Employee(LocalDate birthdate, double hourlyRate, int hoursPerWeek, Genders gender, Name name, String department) {
         this.birthdate = birthdate;
         this.hourlyRate = hourlyRate;
         this.hoursPerWeek = hoursPerWeek;
         this.gender = gender;
         this.name = name;
+        this.department = department;
         this.uuid = UUID.randomUUID().toString();
 
         validate();
@@ -44,24 +47,25 @@ public class Employee {
         return getFullName() + "\t |" + getAge() + "yo\t |" + getGender();
     }
 
+
+    public static int MINIMUM_AGE = 14;
+
     public void validate() throws AppValidationException {
         this.name.validate();
 
         if (getHoursPerWeek() < 0) {
-            throw new AppValidationException("Hours per Week is not valid!");
+            throw new AppValidationException(EmployeeErrorMessage.hoursPerWeekIsNegativ);
         }
         if (getHourlyRate() < 0) {
-            throw new AppValidationException("Hourly Rate is not valid!");
+            throw new AppValidationException(EmployeeErrorMessage.hourlyRateIsNegative);
         }
         if (birthdate.isAfter(LocalDate.now())) {
-            throw new AppValidationException("The date you entered is in the future! Please enter a valid birthdate!");
-        } else if (this.getAge() < 14) {
-            throw new AppValidationException("You're too young to work!");
+            throw new AppValidationException(EmployeeErrorMessage.birthdateIsInFuture);
+        } else if (this.getAge() < MINIMUM_AGE) {
+            throw new AppValidationException(EmployeeErrorMessage.employeeTooYoung);
         }
     }
 
-    // TODO: EMPLOYEE TESTEN -> 100 % (sinnvoll)
-    // TODO: NAME TESTEN -> 100 % (sinnvoll)
 
     @JsonIgnore
     public int getAge() {
@@ -105,6 +109,22 @@ public class Employee {
 
     public String getUuid() {
         return uuid;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Employee employee)) return false;
+        return Objects.equals(uuid, employee.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(uuid);
     }
 }
 

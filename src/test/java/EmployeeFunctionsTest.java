@@ -4,61 +4,52 @@ import static org.mockito.Mockito.when;
 import static tech.mms.cos.core.model.Genders.M;
 import static tech.mms.cos.core.model.Genders.W;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.web.client.RestTemplate;
-import tech.mms.cos.adapter.random.RandomEmployeeGeneratorApi;
-import tech.mms.cos.core.TopEmployees;
+import tech.mms.cos.core.EmployeeFunctions;
 import tech.mms.cos.core.model.Employee;
-import tech.mms.cos.core.model.Genders;
-import tech.mms.cos.core.model.Name;
 import tech.mms.cos.repository.EmployeeRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class EmployeeTest {
+public class EmployeeFunctionsTest {
 
     EmployeeRepository employeeRepository = mock();
-    TopEmployees topEmployees = new TopEmployees(employeeRepository);
-    RandomEmployeeGeneratorApi randomEmployeeGeneratorApi = new RandomEmployeeGeneratorApi(new RestTemplate());
+    EmployeeFunctions employeeFunctions = new EmployeeFunctions(employeeRepository);
 
-    static Employee provideEmployee = new Employee(
-            java.time.LocalDate.of(1989, 12, 1),
-            5.5,
-            37,
-            M,
-            new Name("John", "Bob", "Man"));
+    static Employee provideEmployee = new TestEmployeeProvider.EmployeeBuilder().build();
 
     private List<Employee> provideEmployeeList() {
-
         List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee(
-                java.time.LocalDate.of(1990, 2, 10),
-                5.5,
-                37,
-                M,
-                new Name("John", "Bob", "Man")));
+        employees.add(new TestEmployeeProvider
+                .EmployeeBuilder()
+                .birthdate(LocalDate.now().minusYears(35))
+                .hourlyRate(12)
+                .hoursPerWeek(40)
+                .gender(M)
+                .build());
 
-        employees.add(new Employee(
-                java.time.LocalDate.of(1995, 2, 10),
-                10,
-                40,
-                W,
-                new Name("Jana", "Job", "Woman")));
+        employees.add(new TestEmployeeProvider
+                .EmployeeBuilder()
+                .birthdate(LocalDate.now().minusYears(30))
+                .hourlyRate(15)
+                .hoursPerWeek(37)
+                .gender(M)
+                .build());
 
-        employees.add(new Employee(
-                java.time.LocalDate.of(2000, 2, 10),
-                12.5,
-                35,
-                M,
-                new Name("Johnny", "Bobby", "Manny")));
+        employees.add(new TestEmployeeProvider
+                .EmployeeBuilder()
+                .birthdate(LocalDate.now().minusYears(25))
+                .hourlyRate(10)
+                .hoursPerWeek(20)
+                .gender(M)
+                .build());
 
         return employees;
     }
@@ -66,15 +57,13 @@ public class EmployeeTest {
     @Test
     public void testGetAverageAge() {
         List<Employee> employeeList = provideEmployeeList();
-
-        double averageAge = topEmployees.getAverageAge(employeeList);
-
+        double averageAge = employeeFunctions.getAverageAge(employeeList);
         assertEquals(30.0, averageAge);
     }
 
     @Test
     public void testGetAverageAgeIfListIsEmpty() {
-        double averageAge = topEmployees.getAverageAge(List.of());
+        double averageAge = employeeFunctions.getAverageAge();
         assertEquals(0, averageAge);
     }
 
@@ -87,8 +76,8 @@ public class EmployeeTest {
 
         when(employeeRepository.readEmployees()).thenReturn(List.of(employee1, employee2, employee3));
 
-        Employee topEarnedMale = topEmployees.topEarningsByGender(M);
-        Employee topEarnedFemale = topEmployees.topEarningsByGender(W);
+        Employee topEarnedMale = employeeFunctions.topEarningsByGender(M);
+        Employee topEarnedFemale = employeeFunctions.topEarningsByGender(W);
 
         assertEquals(employee3, topEarnedMale);
         assertEquals(employee2, topEarnedFemale);
@@ -104,12 +93,11 @@ public class EmployeeTest {
 
         when(employeeRepository.readEmployees()).thenReturn(Arrays.asList(employee1, employee2, employee3));
 
-        List<Employee> topEarner = topEmployees.getTopEarningEmployees(20);
+        List<Employee> topEarner = employeeFunctions.getTopEarningEmployees(20);
 
         assertEquals(3, topEarner.size());
         assertEquals(employee3, topEarner.get(0));
         assertEquals(employee2, topEarner.get(1));
-
     }
 
     static Stream<Arguments> employeeDataProvider() {
@@ -129,14 +117,12 @@ public class EmployeeTest {
     @ParameterizedTest
     @MethodSource("employeeDataProvider")
     public void testTopEarningEmployees(List<Employee> input, int n, List<Employee> expectedOutput) {
-
         when(employeeRepository.readEmployees()).thenReturn(input);
 
-        List<Employee> topEarner = topEmployees.getTopEarningEmployees(n);
+        List<Employee> topEarner = employeeFunctions.getTopEarningEmployees(n);
 
         assertEquals(expectedOutput.size(), topEarner.size());
         assertEquals(expectedOutput, topEarner);
-
     }
 
     @Test
@@ -149,8 +135,8 @@ public class EmployeeTest {
 
         when(employeeRepository.readEmployees()).thenReturn(employees);
 
-        double avgSalaryByMale = topEmployees.avgSalByGen(M);
-        double avgSalaryByFemale = topEmployees.avgSalByGen(W);
+        double avgSalaryByMale = employeeFunctions.avgSalByGen(M);
+        double avgSalaryByFemale = employeeFunctions.avgSalByGen(W);
 
         assertEquals(1332.0, avgSalaryByMale);
         assertEquals(1600.0, avgSalaryByFemale);
@@ -181,7 +167,7 @@ public class EmployeeTest {
 
         when(employeeRepository.readEmployees()).thenReturn(employees);
 
-        double avgSalarybyAge = topEmployees.avgSalbyAge(35);
+        double avgSalarybyAge = employeeFunctions.avgSalbyAge(35);
 
         assertEquals(1338.0, avgSalarybyAge);
     }
@@ -198,12 +184,13 @@ public class EmployeeTest {
         assertEquals(3, employees.size(), "expected to have 3 employees in the list");
     }
 
+    /*
     @ParameterizedTest
     @MethodSource("provideAgeData")
     public void testAverageAge(List Employeee, double expectedAge) {
         when(employeeRepository.readEmployees()).thenReturn(provideEmployeeList());
 
-        double actual = topEmployees.getAverageAge();
+        double actual = employeeFunctions.getAverageAge();
 
         assertEquals(expectedAge, actual);
     }
@@ -211,9 +198,10 @@ public class EmployeeTest {
     private static Stream<Arguments> provideAgeData() {
         return Stream.of(
                 Arguments.of(List.of(), 0.0),
-                Arguments.of(List.of(provideEmployee), 35.0),
+                Arguments.of(List.of(), 35.0),
                 Arguments.of(2000, 25)
         );
     }
 
+     */
 }

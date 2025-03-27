@@ -1,101 +1,103 @@
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-import tech.mms.cos.core.model.Employee;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import tech.mms.cos.core.model.Name;
+import tech.mms.cos.core.model.NameErrorMessage;
 import tech.mms.cos.exception.AppValidationException;
 
-import java.time.LocalDate;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static tech.mms.cos.core.model.Genders.M;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class NameTest {
 
-LocalDate birthdate = LocalDate.of(1990, 12, 10);
-double hourlyRate;
-int hoursPerWeek;
+    static String validFirstName = "John";
+    static String validMiddleName = "Bob";
+    static String validLastName = "Man";
 
     @Test
-    public void testValidate_FirstNameIsNull(){
+    public void testValidate_FirstNameIsNull() {
 
-        Exception exception = assertThrows(RuntimeException.class, () -> new Employee(
-                birthdate, hourlyRate, hoursPerWeek, M,
+        Exception exception = assertThrows(AppValidationException.class, () -> new Name(
+                null, validMiddleName, validLastName
+        ));
 
-                new Name(null, "Bob", "Man")));
-
-        assertEquals("First Name is not valid!",exception.getMessage());
+        assertEquals(NameErrorMessage.firstNameIsNotValid, exception.getMessage());
     }
 
     @Test
-    public void testValidate_FirstNameIsBlank(){
+    public void testValidate_FirstNameIsBlank() {
 
-        Exception exception = assertThrows(RuntimeException.class, () -> new Employee(
-                birthdate, hourlyRate, hoursPerWeek, M,
+        Exception exception = assertThrows(AppValidationException.class, () -> new Name(
+                "", validMiddleName, validLastName
+        ));
 
-                new Name("", "Bob", "Man")));
-
-        assertEquals("First Name is not valid!",exception.getMessage());
+        assertEquals(NameErrorMessage.firstNameIsNotValid, exception.getMessage());
     }
 
 
     @Test
-    public void testValidate_MiddleNameIsNotValid(){
+    public void testValidate_MiddleNameIsNotValid() {
 
-        Exception exception = assertThrows(RuntimeException.class, () -> new Employee(
-                birthdate, hourlyRate, hoursPerWeek, M,
+        Exception exception = assertThrows(AppValidationException.class, () -> new Name
+                (validFirstName, "", validLastName));
 
-
-                new Name("John", "", "Man")));
-
-        assertEquals("Middle Name is not valid!",exception.getMessage());
+        assertEquals(NameErrorMessage.middleNameIsNotValid, exception.getMessage());
     }
 
     @Test
-    public void testValidate_LastNameIsNull(){
+    public void testValidate_LastNameIsNull() {
 
-        Exception exception = assertThrows(RuntimeException.class, () -> new Employee(
-                birthdate, hourlyRate, hoursPerWeek, M,
+        Exception exception = assertThrows(AppValidationException.class, () -> new Name
+                (validFirstName, validLastName, null));
 
-                new Name("John", "Bob", null)));
-
-        assertEquals("Last Name is not valid!",exception.getMessage());
+        assertEquals(NameErrorMessage.lastNameIsNotValid, exception.getMessage());
     }
+
 
     @Test
-    public void testValidate_LastNameIsBlank(){
+    public void testValidate_LastNameIsBlank() {
+        // Given
+        var firstName = "Bernd";
+        var middleName = "Sand";
+        var blankLastName = "";
 
-        Exception exception = assertThrows(RuntimeException.class, () -> new Employee(
-                birthdate, hourlyRate, hoursPerWeek, M,
+        // When
+        Exception exception = assertThrows(AppValidationException.class, () -> new Name(firstName, middleName, blankLastName));
 
-                new Name("John", "Bob", "")));
-
-        assertEquals("Last Name is not valid!",exception.getMessage());
+        // Then
+        assertEquals(NameErrorMessage.lastNameIsNotValid, exception.getMessage());
     }
 
 
-@Test
-public void testGetFullName(){
+    @Test
+    public void testGetFullName() {
+        Name nameWithMiddleName = new Name(validFirstName, validMiddleName, validLastName);
+        assertEquals("Man, John Bob", nameWithMiddleName.getFullName());
 
-    Employee employee = new Employee(
-            birthdate, hourlyRate, hoursPerWeek, M,
+        Name nameWithoutMiddleName = new Name(validFirstName, null, validLastName);
 
-            new Name("John", "Bob", "Man"));
+        assertEquals("Man, John", nameWithoutMiddleName.getFullName());
+    }
 
-    assertEquals("Man, John Bob", employee.getFullName());
+    static Stream<Arguments> invalidNames() {
+        return Stream.of(
+                Arguments.of(null, validMiddleName, validLastName, NameErrorMessage.firstNameIsNotValid),
+                Arguments.of("", validMiddleName, validLastName, NameErrorMessage.firstNameIsNotValid),
+                Arguments.of(validFirstName, "", validLastName, NameErrorMessage.middleNameIsNotValid),
+                Arguments.of(validFirstName, validMiddleName, null, NameErrorMessage.lastNameIsNotValid),
+                Arguments.of(validFirstName, validMiddleName, "", NameErrorMessage.lastNameIsNotValid)
+        );
+    }
 
-}
-
-@Test
-public void testGetFullNameWithoutMiddleName(){
-
-    Employee employee = new Employee(
-            birthdate, hourlyRate, hoursPerWeek, M,
-
-            new Name("John", null, "Man"));
-
-    assertEquals("Man, John", employee.getFullName());
-
-}
-
+    @ParameterizedTest
+    @MethodSource("invalidNames")
+    public void testValidate_Names(String firstName, String middleName, String lastName, String expectedErrorMessage) {
+        Exception exception = assertThrows(AppValidationException.class, () -> new Name(firstName, middleName, lastName));
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
 
 }

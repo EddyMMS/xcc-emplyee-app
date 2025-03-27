@@ -32,11 +32,11 @@ public class SpringController implements EmployeesApi {
     @GetMapping("/getDummy")
     public Employee getDummy() {
         var employee = new Employee(LocalDate.of(2025, 1, 1),
-                20, 40, M, new Name("Test", "Dummy", "Unit"));
+                20, 40, M, new Name("Test", "Dummy", "Unit"), "HR");
         employeeRepository.saveEmployee(employee);
         return employee;
 
-    };
+    }
 
     @GetMapping("/random")
     public Employee getRandomEmployee() {

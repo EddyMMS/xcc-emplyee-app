@@ -1,5 +1,3 @@
-
-
 app:
   employeeRepoFilename: employee.json
   outputFilePath: output.txt
@@ -7,6 +5,28 @@ app:
 spring:
   data:
     mongodb:
+      uri: mongodb://localhost:27017/management-app
+
+---
+spring:
+  config:
+    active:
+      on-profile: prod
+  data:
+    mongodb:
+      uri: mongodb+srv://eddyheinz:${MONGO_PW}@xcc.7wk1k.mongodb.net/management-app?retryWrites=true&w=majority&appName=xcc
+
+---
+spring:
+  config:
+    active:
+      on-profile: integration-test
+  data:
+    mongodb:
       host: localhost
       port: 27017
-      database: management-app
+      database: integration-test
+
+adapter:
+  randomEmployee:
+    baseUrl: http://localhost:10400/random-employee

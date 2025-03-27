@@ -12,6 +12,7 @@ public class TestEmployeeProvider {
         private double hourlyRate = 25;
         private int hoursPerWeek = 40;
         private LocalDate birthdate = LocalDate.of(1990, 1, 1);
+        private final String department = "HR";
 
         public EmployeeBuilder gender(Genders genders) {
             this.gender = genders;
@@ -45,7 +46,8 @@ public class TestEmployeeProvider {
                     this.hourlyRate,
                     this.hoursPerWeek,
                     this.gender,
-                    new Name("John", "Bob", "Man")
+                    new Name("John", "Bob", "Man"),
+                    this.department
             );
         }
 

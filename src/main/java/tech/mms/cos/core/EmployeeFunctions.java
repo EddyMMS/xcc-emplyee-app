@@ -1,23 +1,25 @@
 package tech.mms.cos.core;
 
+import org.springframework.stereotype.Component;
 import tech.mms.cos.core.model.Employee;
 import tech.mms.cos.core.model.Genders;
-import tech.mms.cos.io.OutputWriter;
 import tech.mms.cos.repository.EmployeeRepository;
 
 import java.util.Comparator;
 import java.util.List;
 
-public class TopEmployees {
+@Component
+public class EmployeeFunctions {
 
     private final EmployeeRepository employeeRepository;
 
-    public TopEmployees(EmployeeRepository employeeRepository) {
+    public EmployeeFunctions(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
+// TODO: integration test für EmployeeFunctions
+    // TODO: getTopEarningEmployees für n = 1; (mongodb laufen lassen über flapdoodle)
 
     public List<Employee> getTopEarningEmployees(int n) {
-
         List<Employee> employeeList = employeeRepository.readEmployees();
 
         employeeList.sort(Comparator.comparingDouble(Employee::getMonthlySalary).reversed());

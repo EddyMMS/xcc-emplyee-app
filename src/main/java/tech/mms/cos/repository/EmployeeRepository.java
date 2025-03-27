@@ -15,4 +15,6 @@ public interface EmployeeRepository {
     Optional<Employee> find(UUID uuid);
 
     boolean deleteEmployee(UUID uuid);
+
+    void clear();
 }

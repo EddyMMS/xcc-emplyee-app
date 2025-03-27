@@ -24,7 +24,8 @@ public class EmployeeApiMapper {
                 new Name(request.getName().getFirstName(),
                         request.getName().getMiddleName(),
                         request.getName().getLastName()
-                )
+                ),
+                request.getDepartment()
         );
 
     }
@@ -41,7 +42,8 @@ public class EmployeeApiMapper {
                                 .firstName(response.getName().getFirstName())
                                 .middleName(response.getName().getMiddleName())
                                 .lastName(response.getName().getLastName())
-                );
+                )
+                .department(response.getDepartment());
     }
 
 }

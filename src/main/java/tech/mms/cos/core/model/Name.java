@@ -1,6 +1,9 @@
 package tech.mms.cos.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import tech.mms.cos.exception.AppValidationException;
+
+import java.util.Objects;
 
 public class Name {
     private String firstName;
@@ -21,13 +24,13 @@ public class Name {
 
     public void validate() {
         if (getFirstName() == null || getFirstName().isBlank()) {
-            throw new RuntimeException("First Name is not valid!");
+            throw new AppValidationException(NameErrorMessage.firstNameIsNotValid);
         }
         if (getMiddleName() != null && getMiddleName().isBlank()) {
-            throw new RuntimeException("Middle Name is not valid!");
+            throw new AppValidationException(NameErrorMessage.middleNameIsNotValid);
         }
         if (getLastName() == null || getLastName().isBlank()) {
-            throw new RuntimeException("Last Name is not valid!");
+            throw new AppValidationException(NameErrorMessage.lastNameIsNotValid);
         }
     }
 
@@ -52,4 +55,15 @@ public class Name {
         return getLastName() + ", " + getFirstName() + " " + getMiddleName();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Name name)) return false;
+        return Objects.equals(firstName, name.firstName) && Objects.equals(middleName, name.middleName) && Objects.equals(lastName, name.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, middleName, lastName);
+    }
 }

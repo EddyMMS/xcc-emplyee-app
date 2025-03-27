@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import tech.mms.cos.core.model.Employee;
+import tech.mms.cos.exception.AppResourceNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,9 +65,13 @@ public interface MongoEmployeeRepository extends MongoRepository<Employee, Strin
                 .map(employee -> {
                     this.deleteById(employee.getUuid());
                     return true;
-                }).orElse(false);
+                }).orElseThrow(() -> new AppResourceNotFoundException("Employee not found"));
     }
 
+    @Override
+    default void clear() {
+        this.deleteAll();
+    }
 }
 
 /*

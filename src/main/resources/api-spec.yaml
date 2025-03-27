@@ -112,6 +112,8 @@ components:
             - M
             - W
             - D
+        department:
+          type: string
         name:
           $ref: '#/components/schemas/Name'
     Employee:
@@ -137,6 +139,8 @@ components:
             - M
             - W
             - D
+        department:
+          type: string
         name:
           $ref: '#/components/schemas/Name'
     Name:
