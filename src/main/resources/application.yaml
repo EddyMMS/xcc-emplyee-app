@@ -6,11 +6,12 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/management-app
+      database: xcc
 
 ---
 spring:
   config:
-    active:
+    activate:
       on-profile: prod
   data:
     mongodb:
@@ -19,7 +20,7 @@ spring:
 ---
 spring:
   config:
-    active:
+    activate:
       on-profile: integration-test
   data:
     mongodb:
