@@ -11,6 +11,41 @@ import java.time.Period;
 import java.util.Objects;
 import java.util.UUID;
 
+
+/*
+- Profil einfügen
+- Zugriff auf 8080 (expose)
+- Umgebungsvariablen hängen an der Session (google wird die umgebungsvariable an den container mitgegeben)
+
+- alternative: docker compose
+- docker compose file schreiben weche den container startet (das imageeee startet)
+- 8080 soll exposed werden
+- umgebugnsvariable soll übergeben werden (mongo_url)-------------> ich darf hardcoden
+
+
+
+
+- Dockerfile rauskopieren und in die lokale Dockerfile (hier) übertragen -> commit and push
+- Im Github Action Build das Docker image baust (docker build . -t xcc-employee-app) nur wenn der branch master oder develop ist
+- Gib dem image folgende tags
+        - commit sha
+        - master als tag falls branch master
+        - develop asl tag falls develop
+- Upload des Docker images auf docker hub (registrieren, neues image anlegen, hol dir einen api key, api key in github hinterlegen)
+
+
+
+
+
+
+
+
+
+
+
+
+
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee {
 
