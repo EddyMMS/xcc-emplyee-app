@@ -1,0 +1,32 @@
+name: Version Trigger Google Cloud SDK
+
+on:
+  workflow_dispatch:
+    inputs:
+      VERSION:
+        description: '0.0.2'
+        required: true
+        type: string
+
+jobs:
+  setup-gcloud:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}'
+
+      - name: Setup Google Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 416.0.0'
+
+      - name: Run gcloud command
+        run: gcloud compute ssh --zone us-west1-a xcc-training -- 'cd /srv && echo "${{ github.event.inputs.VERSION }}" > deployed_version.txt && ./restart.sh'
+
+

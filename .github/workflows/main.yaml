@@ -2,7 +2,9 @@ name: Build source code
 
 on:
   push:
-
+        branches:
+          - main
+          - develop
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,4 +20,42 @@ jobs:
           java-version: '21'
 
       - name: Build & Test with Maven
-        run: chmod +x mvnw && ./mvnw clean install # Dockerfile
+        run: chmod +x mvnw && ./mvnw clean package # Dockerfile
+
+      - name: Log in to Docker Hub
+        run: echo $DOCKER_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+#- Dockerfile rauskopieren und in die lokale Dockerfile (hier) übertragen -> commit and push
+      #- Im Github Action Build das Docker image baust (docker build . -t xcc-employee-app) nur wenn der branch master oder develop ist
+      #- Gib dem image folgende tags
+      #        - commit sha
+      #        - master als tag falls branch master
+      #        - develop asl tag falls develop
+
+      #- Upload des Docker images auf docker hub (registrieren, neues image anlegen, hol dir einen api key, api key in github hinterlegen)
+      # Was ist ein Personal Access Token, wie unterscheidet es sich von einem Passwort (Vor- Nachteile)
+
+      # Personal Access Token sind Authentifizierungswerkzeuge. Es dient als Ersatz für ein Passwort und ermöglicht
+      # den Zugriff auf bestimmte Ressourcen oder Dienste
+      # Vorteil: Erhöhte Sicherheit durch begrenzte Berechtigung; Außerdem leichtere Verwaltung, da sie spezifisch erstellt werden
+      # Nachteil: Müssen sicher gespeichert werden, Verlust stellt ein Sicherheitsrisiko dar, Möglicherweise weniger vertraut für Benutzer, die mit PWs arbeiten
+
+      - name: Build Docker Image
+        run: |
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/xcc-employee-app
+          SHA_TAG=${GITHUB_SHA}
+          docker build -t ${IMAGE_NAME}:${SHA_TAG} -t ${IMAGE_NAME}:latest .
+          
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          if [ "$BRANCH_NAME" == "master" ] || [ "$BRANCH_NAME" == "develop" ]; then
+                docker build -t ${IMAGE_NAME}:${BRANCH_NAME} .
+            fi          
+
+      #     docker command (Build docker image from dockerfile)
+
+      - name: Push Docker Image
+        run: |
+          docker push --all-tags ${{ secrets.DOCKER_USERNAME }}/xcc-employee-app

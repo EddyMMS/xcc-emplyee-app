@@ -11,6 +11,64 @@ import java.time.Period;
 import java.util.Objects;
 import java.util.UUID;
 
+
+/*
+- Profil einfügen
+- Zugriff auf 8080 (expose)
+- Umgebungsvariablen hängen an der Session (google wird die umgebungsvariable an den container mitgegeben)
+
+- alternative: docker compose
+- docker compose file schreiben weche den container startet (das imageeee startet)
+- 8080 soll exposed werden
+- umgebugnsvariable soll übergeben werden (mongo_url)-------------> ich darf hardcoden
+
+
+
+
+- Dockerfile rauskopieren und in die lokale Dockerfile (hier) übertragen -> commit and push
+- Im Github Action Build das Docker image baust (docker build . -t xcc-employee-app) nur wenn der branch master oder develop ist
+- Gib dem image folgende tags
+        - commit sha
+        - master als tag falls branch master
+        - develop asl tag falls develop
+- Upload des Docker images auf docker hub (registrieren, neues image anlegen, hol dir einen api key, api key in github hinterlegen)
+
+// Docker Image über die VM ziehen, die Anwendung darüber laufen lassen und mit curl (8080) getDummy in die Datenbank speichern
+
+TODO: Also das secret sich zu holen geht jetzt mit "gcloud secrets versions access latest --secret=xcc-employee-mongo-pw"
+
+ In dem Verzeichnis wo die docker-compose.yml liegt soll ich ein Skript anlegen was folgendermaßen heißt: startup.sh
+export MONGO_PW=$(gcloud secrets versions access latest --secret=xcc-employee-mongo-pw)
+sudo docker compose up -d
+
+IN Startup Script von GCloud sudo startup.sh starten (sudo chmod +x startup.sh) -> Test: Fahr VM per UI runter und wieder hoch -> Geh in die VM sudo docker ps
+
+restart.sh
+-> Docker compose runterfahren
+-> Wiederhochfahren
+
+-> Wenn du ein Tag in Github/Git anlegst, triggert ein neuer Workflow
+   -> Läuft nur wenn "Branch ist master / develop" UND der Tag hat format "x.x.x" (CMd check if string is semantic versioning)
+   -> Bauen der Anwendung, Bauen des Image, Hochladen des Image mit Tag "1.0.0"
+
+
+
+Manueller Workflow erstellen
+Der VM soll manuell eine Version gegeben werden
+Ändere Datei welche Versionsnummer enthält ab zu "VERSION" (in VM) und restart Docker Container
+
+1. Geh in die VM und ändere das Docker Compose File ab, sodass es nicht "latest" verwendet, sondern eine Umgebungsvariable welche "DEPLOYED_IMAGE_TAG" heißt. ${DEPLOYED_IMAGE_TAG] heißt.
+2. Lege eine neue Datei an die heißt "deployed_version.txt" welche den Text "0.0.2" beinhaltet (direkt wo die docker compose file auch liegt)
+3. Neue Zeile zu startup-sh hinzufügen, welche DEPLOYED_IMAGE_TAG als Umgebungsvariable setzt, indem es die Datei "deployed_version.txt" ausliest.
+
+---
+
+1. Neuen GitHub Workflow anlegen, welcher manuell getriggered wird mit Variable "VERSION" als Freitext-Feld.
+2. github.com/google-github-actions/setup-gcloud
+
+
+
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee {
 
