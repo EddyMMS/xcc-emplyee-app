@@ -2,7 +2,9 @@ name: Build source code
 
 on:
   push:
-
+        branches:
+          - main
+          - develop
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,3 +21,24 @@ jobs:
 
       - name: Build & Test with Maven
         run: chmod +x mvnw && ./mvnw clean package # Dockerfile
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker Image
+        run: cp ./Dockerfile
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@example.com"
+          git add Dockerfile
+          git commit -m "Updated Dockerfile"
+          git push
+
+      - name: Push Docker Image
+        run:  IMAGE_TAG=${{ github.sha }}
+          docker push xcc-employee-app:$IMAGE_TAG
+          if [ ! -z "$TAG" ]; then
+          docker push xcc-employee-app:$TAG
+          fi

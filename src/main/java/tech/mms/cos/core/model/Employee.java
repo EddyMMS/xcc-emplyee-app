@@ -35,15 +35,7 @@ import java.util.UUID;
 
 
 
-
-
-
-
-
-
-
-
-
+TODO: Also das secret sich zu holen geht jetzt mit "gcloud secrets versions access latest --secret=xcc-employee-mongo-pw"
 
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
