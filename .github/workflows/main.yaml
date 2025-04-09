@@ -22,11 +22,11 @@ jobs:
       - name: Build & Test with Maven
         run: chmod +x mvnw && ./mvnw clean package # Dockerfile
 
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Log in to Docker Hub
+        run: echo $DOCKER_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
 #- Dockerfile rauskopieren und in die lokale Dockerfile (hier) übertragen -> commit and push
       #- Im Github Action Build das Docker image baust (docker build . -t xcc-employee-app) nur wenn der branch master oder develop ist
