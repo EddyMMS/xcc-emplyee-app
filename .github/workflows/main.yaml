@@ -46,13 +46,12 @@ jobs:
       - name: Build Docker Image
         run: |
           SHA_TAG=${GITHUB_SHA}
-          docker build -t xcc-employee-app:${SHA_TAG} -t xcc-employee-app:latest
+          docker build -t xcc-employee-app:${SHA_TAG} -t xcc-employee-app:latest .
           
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           if [ "$BRANCH_NAME" == "master" ] || [ "$BRANCH_NAME" == "develop" ]; then
                 docker build -t xcc-employee-app:${BRANCH_NAME} .
             fi          
-                    docker build -t xcc-employee-app:${TAG} ${TAGS} .
 
       #     docker command (Build docker image from dockerfile)
 
