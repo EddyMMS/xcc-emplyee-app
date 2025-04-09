@@ -51,7 +51,8 @@ jobs:
                     elif [ "${GITHUB_REF#refs/heads/}" == "develop" ]; then
                       TAGS="$TAG develop"
                     fi
-                    docker build . -t xcc-employee-app:${TAG} ${TAGS}
+                    docker build -t xcc-employee-app:${TAG} ${TAGS} .
+
 
       #     docker command (Build docker image from dockerfile)
 
