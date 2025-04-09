@@ -26,19 +26,35 @@ jobs:
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+#- Dockerfile rauskopieren und in die lokale Dockerfile (hier) übertragen -> commit and push
+      #- Im Github Action Build das Docker image baust (docker build . -t xcc-employee-app) nur wenn der branch master oder develop ist
+      #- Gib dem image folgende tags
+      #        - commit sha
+      #        - master als tag falls branch master
+      #        - develop asl tag falls develop
+
+      #- Upload des Docker images auf docker hub (registrieren, neues image anlegen, hol dir einen api key, api key in github hinterlegen)
+      # Was ist ein Personal Access Token, wie unterscheidet es sich von einem Passwort (Vor- Nachteile)
+
+      # Personal Access Token sind Authentifizierungswerkzeuge. Es dient als Ersatz für ein Passwort und ermöglicht
+      # den Zugriff auf bestimmte Ressourcen oder Dienste
+      # Vorteil: Erhöhte Sicherheit durch begrenzte Berechtigung; Außerdem leichtere Verwaltung, da sie spezifisch erstellt werden
+      # Nachteil: Müssen sicher gespeichert werden, Verlust stellt ein Sicherheitsrisiko dar, Möglicherweise weniger vertraut für Benutzer, die mit PWs arbeiten
 
       - name: Build Docker Image
-        run: cp ./Dockerfile
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@example.com"
-          git add Dockerfile
-          git commit -m "Updated Dockerfile"
-          git push
+        run: |
+          TAG=${GITHUB_SHA}
+          if [ "${GITHUB_REF#refs/heads/}" == "master" ]; then
+                      TAGS="$TAG master"
+                    elif [ "${GITHUB_REF#refs/heads/}" == "develop" ]; then
+                      TAGS="$TAG develop"
+                    fi
+                    docker build . -t xcc-employee-app:$TAG $TAGS
+      #     docker command (Build docker image from dockerfile)
 
       - name: Push Docker Image
-        run:  IMAGE_TAG=${{ github.sha }}
+        run: |
+          IMAGE_TAG=${{ github.sha }}
           docker push xcc-employee-app:$IMAGE_TAG
-          if [ ! -z "$TAG" ]; then
-          docker push xcc-employee-app:$TAG
-          fi
