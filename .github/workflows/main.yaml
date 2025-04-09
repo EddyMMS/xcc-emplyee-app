@@ -45,18 +45,19 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          TAG=${GITHUB_SHA}
-          if [ "${GITHUB_REF#refs/heads/}" == "master" ]; then
-                      TAGS="$TAG master"
+          SHA_TAG=${GITHUB_SHA}
+          docker build -t xcc-employee-app:${SHA_TAG} -t xcc-employee-app:latest
+          
+          if [ "${GITHUB_REF#refs/heads/}" == "master" || "${GITHUB_REF#refs/heads/}" == "develop" ]; then
+                      docker build -t xcc-employee-app:${GITHUB_REF#refs/heads/}
                     elif [ "${GITHUB_REF#refs/heads/}" == "develop" ]; then
                       TAGS="$TAG develop"
                     fi
+          
                     docker build -t xcc-employee-app:${TAG} ${TAGS} .
-
 
       #     docker command (Build docker image from dockerfile)
 
       - name: Push Docker Image
         run: |
-          IMAGE_TAG=${{ github.sha }}
-          docker push xcc-employee-app:$IMAGE_TAG
+          docker push -a xcc-employee-app
