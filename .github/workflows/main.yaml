@@ -46,13 +46,20 @@ jobs:
       - name: Build Docker Image
         run: |
           SHA_TAG=${GITHUB_SHA}
-          docker build -t xcc-employee-app:${SHA_TAG} -t xcc-employee-app:latest
+          docker build -t xcc-employee-app:${SHA_TAG} -t xcc-employee-app:latest .
           
-          if [ "${GITHUB_REF#refs/heads/}" == "master" || "${GITHUB_REF#refs/heads/}" == "develop" ]; then
-                      docker build -t xcc-employee-app:${GITHUB_REF#refs/heads/}
-                    elif [ "${GITHUB_REF#refs/heads/}" == "develop" ]; then
-                      TAGS="$TAG develop"
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          if [ "$BRANCH_NAME" = "master" ] || [ "$BRANCH_NAME" = "develop" ]; then
+              TAGS="-t xcc-employee-app:${BRANCH_NAME}"
+              docker build ${TAGS} .
                     fi
+          
+
+    #      if [ "${GITHUB_REF#refs/heads/}" == "master" || "${GITHUB_REF#refs/heads/}" == "develop" ]; then
+     #                 docker build -t xcc-employee-app:${GITHUB_REF#refs/heads/}
+      #              elif [ "${GITHUB_REF#refs/heads/}" == "develop" ]; then
+       #               TAGS="$TAG develop"
+        #            fi
           
                     docker build -t xcc-employee-app:${TAG} ${TAGS} .
 
