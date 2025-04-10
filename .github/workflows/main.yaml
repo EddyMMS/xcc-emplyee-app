@@ -57,4 +57,4 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push --all-tags xcc-employee-app
+          docker push --all-tags ${{ secrets.DOCKER_USERNAME }}/xcc-employee-app
