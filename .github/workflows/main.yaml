@@ -57,4 +57,4 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push xcc-employee-app
+          docker push --all-tags xcc-employee-app
