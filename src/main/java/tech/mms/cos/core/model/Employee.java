@@ -33,9 +33,23 @@ import java.util.UUID;
         - develop asl tag falls develop
 - Upload des Docker images auf docker hub (registrieren, neues image anlegen, hol dir einen api key, api key in github hinterlegen)
 
-
+// Docker Image über die VM ziehen, die Anwendung darüber laufen lassen und mit curl (8080) getDummy in die Datenbank speichern
 
 TODO: Also das secret sich zu holen geht jetzt mit "gcloud secrets versions access latest --secret=xcc-employee-mongo-pw"
+
+ In dem Verzeichnis wo die docker-compose.yml liegt soll ich ein Skript anlegen was folgendermaßen heißt: startup.sh
+export MONGO_PW=$(gcloud secrets versions access latest --secret=xcc-employee-mongo-pw)
+sudo docker compose up -d
+
+IN Startup Script von GCloud sudo startup.sh starten (sudo chmod +x startup.sh) -> Test: Fahr VM per UI runter und wieder hoch -> Geh in die VM sudo docker ps
+
+restart.sh
+-> Docker compose runterfahren
+-> Wiederhochfahren
+
+-> Wenn du ein Tag in Github/Git anlegst, triggert ein neuer Workflow
+   -> Läuft nur wenn "Branch ist master / develop" UND der Tag hat format "x.x.x" (CMd check if string is semantic versioning)
+   -> Bauen der Anwendung, Bauen des Image, Hochladen des Image mit Tag "1.0.0"
 
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
