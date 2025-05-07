@@ -36,6 +36,7 @@ public class EmployeeApiMapper {
                 .birthdate(response.getBirthdate().format(DateTimeFormatter.ISO_DATE))
                 .hourlyRate(response.getHourlyRate())
                 .hoursPerWeek(response.getHoursPerWeek())
+                .monthlySalary(response.getMonthlySalary())
                 .gender(EmployeeDTO.GenderEnum.valueOf(response.getGender().name()))
                 .name(
                         new NameDTO()

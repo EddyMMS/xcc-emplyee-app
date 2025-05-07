@@ -47,7 +47,9 @@ public class SpringController implements EmployeesApi {
         // 4. Schau dir die Response der API an, baue eine Klasse (Mehrere Klassen) die der Response entsprechen.
         // https://randomuser.me/api/
 
-        return employeeGeneratorApi.generate();
+        var randomEmployee = employeeGeneratorApi.generate();
+        employeeRepository.saveEmployee(randomEmployee);
+        return randomEmployee;
     }
 
 

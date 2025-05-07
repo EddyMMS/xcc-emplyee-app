@@ -68,6 +68,11 @@ Der VM soll manuell eine Version gegeben werden
 
 
 
+Setze NGINX auf der VM auf. Leite jeglichen Traffic von 80 auf 8080 um.
+
+
+
+
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee {
@@ -78,7 +83,6 @@ public class Employee {
     private LocalDate birthdate;
     private double hourlyRate;
     private int hoursPerWeek;
-    private double monthlySalary;
     private Genders gender;
     private Name name;
     private String department;
