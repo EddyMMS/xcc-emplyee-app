@@ -1,5 +1,6 @@
 package tech.mms.cos.api;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.mms.cos.api.client.EmployeesApi;
@@ -8,11 +9,14 @@ import tech.mms.cos.api.model.EmployeeDTO;
 import tech.mms.cos.api.model.NewEmployeeRequestDTO;
 import tech.mms.cos.core.RandomEmployeeService;
 import tech.mms.cos.core.model.Employee;
+import tech.mms.cos.core.model.Genders;
 import tech.mms.cos.core.model.Name;
+import tech.mms.cos.exception.AppValidationException;
 import tech.mms.cos.repository.EmployeeRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static tech.mms.cos.core.model.Genders.M;
@@ -88,8 +92,41 @@ public class SpringController implements EmployeesApi {
 
     @Override
     public ResponseEntity<EmployeeDTO> employeesUuidPut(String uuid, EmployeeDTO employeeDTO) {
-        return null; //TODO
+        try {
+            UUID id = UUID.fromString(uuid);
+
+            Optional<Employee> existingEmployeeOpt = employeeRepository.find(id);
+
+            if (existingEmployeeOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Employee existingEmployee = existingEmployeeOpt.get();
+
+            LocalDate birthdate = LocalDate.parse(employeeDTO.getBirthdate());
+
+            existingEmployee.setBirthdate(birthdate);
+            existingEmployee.setHourlyRate(employeeDTO.getHourlyRate());
+            existingEmployee.setHoursPerWeek(employeeDTO.getHoursPerWeek());
+            existingEmployee.setGender(Genders.valueOf(employeeDTO.getGender().name()));
+            existingEmployee.setName(new Name(
+                    employeeDTO.getName().getFirstName(),
+                    employeeDTO.getName().getLastName(),
+                    employeeDTO.getName().getMiddleName()
+            ));
+            existingEmployee.setDepartment(employeeDTO.getDepartment());
+
+            existingEmployee.validate();
+
+            Employee result = employeeRepository.saveEmployee(existingEmployee);
+
+            return ResponseEntity.ok(EmployeeApiMapper.mapResponse(result));
+
+        } catch (IllegalArgumentException | AppValidationException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
+
 
     @Override
     public ResponseEntity<List<EmployeeDTO>> listAllEmployees() {

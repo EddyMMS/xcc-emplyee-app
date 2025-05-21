@@ -88,6 +88,7 @@ public class Employee {
     private String department;
 
 
+
     public Employee(LocalDate birthdate, double hourlyRate, int hoursPerWeek, Genders gender, Name name, String department) {
         this.birthdate = birthdate;
         this.hourlyRate = hourlyRate;
@@ -187,6 +188,44 @@ public class Employee {
     @Override
     public int hashCode() {
         return Objects.hashCode(uuid);
+    }
+
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public void setHoursPerWeek(int hoursPerWeek) {
+        this.hoursPerWeek = hoursPerWeek;
+    }
+
+    public void setGender(Genders gender) {
+        this.gender = gender;
+    }
+
+    public void setName(Name name) {
+        this.name = name;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public void updateAllFields(LocalDate birthdate, double hourlyRate, int hoursPerWeek,
+                                Genders gender, Name name, String department) {
+        this.birthdate = birthdate;
+        this.hourlyRate = hourlyRate;
+        this.hoursPerWeek = hoursPerWeek;
+        this.gender = gender;
+        this.name = name;
+        this.department = department;
+
+
+        validate();
     }
 }
 
