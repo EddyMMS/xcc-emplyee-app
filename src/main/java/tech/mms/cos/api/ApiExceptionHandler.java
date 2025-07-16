@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 import org.zalando.problem.ThrowableProblem;
+import org.zalando.problem.spring.web.advice.general.ProblemAdviceTrait;
 import tech.mms.cos.exception.AppResourceNotFoundException;
 import tech.mms.cos.exception.AppValidationException;
 
 @ControllerAdvice
-public class ApiExceptionHandler {
+public class ApiExceptionHandler implements ProblemAdviceTrait {
 
     @ExceptionHandler(AppValidationException.class)
     public ResponseEntity<Problem> handleValidationException(AppValidationException ex, HttpServletRequest request) {

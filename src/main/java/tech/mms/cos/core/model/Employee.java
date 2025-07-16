@@ -191,8 +191,9 @@ public class Employee {
     }
 
 
-    public void setBirthdate(LocalDate birthdate) {
+    public Employee setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
+        return this;
     }
 
     public void setHourlyRate(double hourlyRate) {

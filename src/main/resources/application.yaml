@@ -2,6 +2,11 @@ app:
   employeeRepoFilename: employee.json
   outputFilePath: output.txt
 
+auth:
+  github:
+    client-id: Ov23ligTzzgAyRB1KXuw
+    client-secret: ${GITHUB_CLIENT_SECRET}
+
 spring:
   data:
     mongodb:
