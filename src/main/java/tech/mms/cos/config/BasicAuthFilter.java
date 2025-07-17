@@ -54,7 +54,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                 if (StringUtils.startsWithIgnoreCase(authHeader, "Basic ")) {
                     handleBasicAuth(authHeader);
                 } else if (StringUtils.startsWithIgnoreCase(authHeader, "Bearer gho_")) {
-                    handleBearerAuth(authHeader);
+                    handleGithubBearerAuth(authHeader);
                 } else if (StringUtils.startsWithIgnoreCase(authHeader, "Bearer ")) {
                     handleJwtBearerAuth(authHeader, response);
                 }
@@ -78,7 +78,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authenticatedAccount);
     }
 
-    private void handleBearerAuth(String authHeader) {
+    private void handleGithubBearerAuth(String authHeader) {
         String accessToken = authHeader.substring(7).trim();
 
         GithubUserInfoResponse userInfo = gitHubAuthService.getUserInfo(accessToken);
@@ -97,9 +97,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
         String jwtToken = authHeader.substring(7).trim();
 
         Claims claims = jwtService.validateToken(jwtToken);
-
         String username = claims.getSubject();
-
         Optional<Account> accountOpt = customAccountMongoRepository.findByUsername(username);
 
         if (accountOpt.isEmpty()) {

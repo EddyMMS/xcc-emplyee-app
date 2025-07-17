@@ -1,7 +1,7 @@
 package tech.mms.cos.core.auth.model;
-
-
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class JwtService {
                 .compact();
     }
 
-    public Claims validateToken(String token) {
+    private Claims parseClaimsFromToken(String token) {
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .requireIssuer(jwtConfig.getIssuer())
@@ -46,17 +46,24 @@ public class JwtService {
                 .getPayload();
     }
 
-    public boolean isTokenValid(String token) {
+    public Claims validateToken(String token) {
         try {
-            validateToken(token);
-            return true;
+            return parseClaimsFromToken(token);
+        } catch (ExpiredJwtException e) {
+            throw e;
+        }  catch (IncorrectClaimException e) {
+            if (e.getClaimName().equalsIgnoreCase("iss")) {
+                throw e;
+            }
+
+            throw e;
         } catch (Exception e) {
-            return false;
+            throw e;
         }
     }
 
     public String getUsernameFromToken(String token) {
-        Claims claims = validateToken(token);
+        Claims claims = parseClaimsFromToken(token);
         return claims.getSubject();
     }
 }

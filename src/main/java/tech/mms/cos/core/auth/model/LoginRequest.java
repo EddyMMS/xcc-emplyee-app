@@ -11,6 +11,11 @@ private String password;
         this.password = password;
     }
 
+    private LoginRequest() {
+
+
+    }
+
     public String getUsername() {
         return username;
     }

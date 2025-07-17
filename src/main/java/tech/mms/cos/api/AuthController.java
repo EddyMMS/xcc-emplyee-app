@@ -12,6 +12,7 @@ import tech.mms.cos.core.auth.model.LoginRequest;
 import tech.mms.cos.core.auth.model.LoginService;
 import tech.mms.cos.core.model.GithubAccount;
 import tech.mms.cos.core.model.LocalAppAccount;
+import tech.mms.cos.exception.LoginFailedException;
 import tech.mms.cos.service.GitHubAuthService;
 import tech.mms.cos.service.GitHubOAuthRequest;
 
@@ -70,20 +71,24 @@ public class AuthController {
 
             String jwtToken = jwtService.generateToken(account);
 
+            // 2. Aufgabe: Eigene Response Klasse erstellen.
+            // 3. Aufgabe: Baue Login in Frontend ein.
+            //  3.1 Login Form anpassen -> Setze Token in Redux Store
+            //  3.2 (Das funktioniert schon) Testen ob getEmployees im Frontend funktioniert nach login
+
+            // Map ersetzen durch login response klasse
             Map<String, Object> response = new HashMap<>();
             response.put("token", jwtToken);
             response.put("username", account.getUsername());
             response.put("roles", account.getRoles());
             response.put("departments", account.getDepartments());
-            response.put("message", "Login successful");
 
             return ResponseEntity.ok(response);
         } else {
 
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Invalid username or password");
+            // 1. Aufgabe Zalando Problem soll zurückgegeben werden
+            throw new LoginFailedException("Credentials do not match");
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
 }

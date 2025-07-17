@@ -8,11 +8,10 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
 
-    private String secret = "mySecretKey123456789012345678901234567890";
-    private long expirationMs = 86400000; // 24 hrs
-    private String issuer = "xcc-backend";
-    private String audience = "xcc";
-
+    private String secret;
+    private long expirationMs; // 24 hrs
+    private String issuer;
+    private String audience;
 
     public String getSecret() {
         return secret;

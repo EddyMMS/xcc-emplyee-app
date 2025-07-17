@@ -13,6 +13,12 @@ spring:
       uri: mongodb://localhost:27017/management-app
       database: xcc
 
+jwt:
+  audience: xcc
+  issuer: xcc-backend
+  expirationMs: 86400000
+  secret: ${JWT_SECRET}
+
 ---
 spring:
   config:
