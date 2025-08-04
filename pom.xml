@@ -13,11 +13,20 @@
     <groupId>tech.mms.cos</groupId>
     <artifactId>management-app</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>employee-core</module>
+        <module>employee-api</module>
+        <module>employee-infrastructure</module>
+        <module>employee-application</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.maven-surefire-plugin>3.5.3</version.maven-surefire-plugin>
+        <version.mojo>3.6.1</version.mojo>
     </properties>
     <dependencies>
         <dependency>
@@ -143,16 +152,111 @@
             <version>3.8.2</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.43.0</version>
+                <configuration>
+                    <java>
+                        <googleJavaFormat/>
+                    </java>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.2</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${version.mojo}</version>
+                <executions>
+                    <execution>
+                        <id>add_sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/main/java</source>
+                                <source>${project.basedir}/src/main/kotlin</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add_test_sources</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/test/java</source>
+                                <source>${project.basedir}/src/test/kotlin</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
+
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+                <executions>
+                    <!-- Replacing default-compile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <!-- Replacing default-testCompile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>java-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>java-test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${version.maven-surefire-plugin}</version>
+                <configuration>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                    <properties>
+                        <excludedGroups>${surefire.excludedGroups}</excludedGroups>
+                    </properties>
+                    <systemPropertyVariables>
+                        <systemPropertyVariables>
+                            <kotest.framework.classpath.scanning.autoscan.disable>true</kotest.framework.classpath.scanning.autoscan.disable>
+                            <kotest.framework.classpath.scanning.config.disable>true</kotest.framework.classpath.scanning.config.disable>
+                        </systemPropertyVariables>
+                    </systemPropertyVariables>
+                    <trimStackTrace>false</trimStackTrace>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -166,70 +270,8 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.11.0</version>
-                <executions>
-                    <execution>
-                        <id>generate-api</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <modelNameSuffix>DTO</modelNameSuffix>
-                            <inputSpec>${project.basedir}/src/main/resources/api-spec.yaml</inputSpec>
-                            <modelPackage>tech.mms.cos.api.model</modelPackage>
-                            <apiPackage>tech.mms.cos.api.client</apiPackage>
-                            <generatorName>spring</generatorName>
-                            <generateApis>true</generateApis>
-                            <generateApiTests>false</generateApiTests>
-                            <generateApiDocumentation>true</generateApiDocumentation>
-                            <generateModels>true</generateModels>
-                            <generateModelTests>false</generateModelTests>
-                            <generateModelDocumentation>false</generateModelDocumentation>
-                            <generateSupportingFiles>false</generateSupportingFiles>
-                            <generateAliasAsModel>false</generateAliasAsModel>
-                            <configOptions>
-                                <sourceFolder>src/java/main</sourceFolder>
-                                <useJakartaEe>true</useJakartaEe>
-                                <booleanGetterPrefix>is</booleanGetterPrefix>
-                                <interfaceOnly>true</interfaceOnly>
-                                <java8>true</java8>
-                                <library>spring-cloud</library>
-                                <dateLibrary>java8</dateLibrary>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>generate-random-user-api</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <modelNameSuffix>DTO</modelNameSuffix>
-                            <modelNamePrefix>RandomEmployee</modelNamePrefix>
-                            <inputSpec>${project.basedir}/src/main/resources/random-employee-spec.yaml</inputSpec>
-                            <modelPackage>tech.mms.cos.adapter.random.model</modelPackage>
-                            <apiPackage>tech.mms.cos.adapter.random.client</apiPackage>
-                            <generatorName>java</generatorName>
-                            <generateApiTests>false</generateApiTests>
-                            <generateApis>true</generateApis>
-                            <generateModels>true</generateModels>
-                            <generateModelTests>false</generateModelTests>
-                            <skipValidateSpec>true</skipValidateSpec>
-                            <configOptions>
-                                <useJakartaEe>true</useJakartaEe>
-                                <sourceFolder>src/java/main</sourceFolder>
-                                <interfaceOnly>true</interfaceOnly>
-                                <java8>true</java8>
-                                <library>resttemplate</library>
-                                <openApiNullable>false</openApiNullable>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+
+
         </plugins>
     </build>
 </project>
