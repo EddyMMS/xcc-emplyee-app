@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>tech.mms.cos</groupId>
+        <artifactId>management-app</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>employee-api</artifactId>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>tech.mms.cos</groupId>
+            <artifactId>employee-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>tech.mms.cos</groupId>
+            <artifactId>employee-infrastructure</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.11.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-api</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <modelNameSuffix>DTO</modelNameSuffix>
+                            <inputSpec>${project.basedir}/src/main/resources/api-spec.yaml</inputSpec>
+                            <modelPackage>tech.mms.cos.api.model</modelPackage>
+                            <apiPackage>tech.mms.cos.api.client</apiPackage>
+                            <generatorName>spring</generatorName>
+                            <generateApis>true</generateApis>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>true</generateApiDocumentation>
+                            <generateModels>true</generateModels>
+                            <generateModelTests>false</generateModelTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <generateAliasAsModel>false</generateAliasAsModel>
+                            <configOptions>
+                                <sourceFolder>src/java/main</sourceFolder>
+                                <useTags>true</useTags>
+                                <useJakartaEe>true</useJakartaEe>
+                                <booleanGetterPrefix>is</booleanGetterPrefix>
+                                <interfaceOnly>true</interfaceOnly>
+                                <java8>true</java8>
+                                <library>spring-cloud</library>
+                                <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

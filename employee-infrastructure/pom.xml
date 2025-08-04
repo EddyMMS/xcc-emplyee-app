@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>tech.mms.cos</groupId>
+        <artifactId>management-app</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>employee-infrastructure</artifactId>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>tech.mms.cos</groupId>
+            <artifactId>employee-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.11.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-random-user-api</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <modelNameSuffix>DTO</modelNameSuffix>
+                            <modelNamePrefix>RandomEmployee</modelNamePrefix>
+                            <inputSpec>${project.basedir}/src/main/resources/random-employee-spec.yaml</inputSpec>
+                            <modelPackage>tech.mms.cos.adapter.random.model</modelPackage>
+                            <apiPackage>tech.mms.cos.adapter.random.client</apiPackage>
+                            <generatorName>java</generatorName>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApis>true</generateApis>
+                            <generateModels>true</generateModels>
+                            <generateModelTests>false</generateModelTests>
+                            <skipValidateSpec>true</skipValidateSpec>
+                            <configOptions>
+                                <useJakartaEe>true</useJakartaEe>
+                                <sourceFolder>src/java/main</sourceFolder>
+                                <interfaceOnly>true</interfaceOnly>
+                                <java8>true</java8>
+                                <library>resttemplate</library>
+                                <openApiNullable>false</openApiNullable>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
